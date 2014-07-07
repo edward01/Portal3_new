@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Dashboard :: Servers</title>
+    <title>Dashboard :: {% block title %}{% endblock %}</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">    
@@ -44,6 +44,8 @@
     <a class="navbar-brand" href="{{ url_for('user.login_form') }}">Portal<span class="ui-state-active">3</span> Admin Console</a>
   </div>
 
+
+{% if not is_error_page %}
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right">
@@ -88,13 +90,15 @@
       </div>
     </form>
   </div><!-- /.navbar-collapse -->
+{% endif %}
+
 </div> <!-- /.container -->
 </nav>
     
 
 
 
-    
+{% if not is_error_page %}
 <div class="subnavbar">
 
 	<div class="subnavbar-inner">
@@ -167,7 +171,7 @@
 	</div> <!-- /subnavbar-inner -->
 
 </div> <!-- /subnavbar -->
-
+{% endif %}
 
     
 <div class="main">
