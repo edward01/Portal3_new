@@ -1,0 +1,141 @@
+{% set messages = get_flashed_messages(with_categories=true) %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Login</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"> 
+    
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+	<link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" rel="stylesheet" type="text/css" />
+	
+	<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/ui-lightness/jquery-ui-1.10.0.custom.min.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/base-admin-3.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base-admin-3-responsive.css') }}" rel="stylesheet">
+	
+    <link href="{{ url_for('static', filename='css/pages/signin.css') }}" rel="stylesheet" type="text/css">
+
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+	
+<nav class="navbar navbar-inverse" role="navigation">
+
+	<div class="container">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="{{ url_for('user.login_form') }}">Portal<span class="ui-state-active">3</span> Admin Console</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <!--<div class="collapse navbar-collapse navbar-ex1-collapse">-->
+    <!--<ul class="nav navbar-nav navbar-right">-->
+      <!--<li class="">						-->
+			<!--<a href="./signup.html">-->
+				<!--Create an Account-->
+			<!--</a>			-->
+		<!--</li>-->
+
+		<!--<li class="">-->
+						<!---->
+			<!--<a href="#">-->
+				<!--<i class="icon-chevron-left"></i>&nbsp;&nbsp; -->
+				<!--Back to Homepage-->
+			<!--</a>-->
+			<!---->
+		<!--</li>-->
+    <!--</ul>-->
+  <!--</div>&lt;!&ndash; /.navbar-collapse &ndash;&gt;-->
+</div> <!-- /.container -->
+</nav>
+
+
+
+<div class="account-container stacked">
+	
+	<div class="content clearfix">
+		
+		<form action="/login" method="post">
+		
+			<h1>Sign In</h1>		
+			
+			<div class="login-fields">
+				
+				<p class="choice">
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div>{{ message|safe }}</div>
+                        {% endfor %}
+                    {% endif %}
+				</p>
+				
+				<div class="field">
+					<label for="username">Username:</label>
+					<input type="text" id="username" name="username" placeholder="Username" class="form-control input-lg username-field" />
+				</div> <!-- /field -->
+				
+				<div class="field">
+					<label for="password">Password:</label>
+					<input type="password" id="password" name="password" placeholder="Password" class="form-control input-lg password-field"/>
+				</div> <!-- /password -->
+				
+			</div> <!-- /login-fields -->
+			
+			<div class="login-actions">
+				
+				<span class="login-checkbox">
+					<input id="Field" name="Field" type="checkbox" class="field login-checkbox" value="First Choice" tabindex="4" />
+					<label class="choice" for="Field">Keep me signed in</label>
+				</span>
+									
+				<button class="login-action btn btn-primary">Sign In</button>
+				
+			</div> <!-- .actions -->
+
+            <p></p>
+
+			<div class="login-social">
+                This computer resource is a private property. Unauthorized access, misuse, and misappropriation of
+                resources is prohibited by law.
+			</div>
+			
+		</form>
+		
+	</div> <!-- /content -->
+	
+</div> <!-- /account-container -->
+
+
+<!--&lt;!&ndash; Text Under Box &ndash;&gt;-->
+<!--<div class="login-extra">-->
+	<!--Don't have an account? <a href="./signup.html">Sign Up</a><br/>-->
+	<!--Remind <a href="#">Password</a>-->
+<!--</div> &lt;!&ndash; /login-extra &ndash;&gt;-->
+
+
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ url_for('static', filename='js/libs/jquery-1.9.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/jquery-ui-1.10.0.custom.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/Application.js') }}"></script>
+<script src="{{ url_for('static', filename='js/demo/signin.js') }}"></script>
+
+</body>
+</html>
