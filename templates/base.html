@@ -1,0 +1,227 @@
+{% set messages = get_flashed_messages(with_categories=true) %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard :: Servers</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">    
+    
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/ui-lightness/jquery-ui-1.10.0.custom.min.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/base-admin-3.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base-admin-3-responsive.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/pages/dashboard.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  </head>
+
+<body>
+
+<nav class="navbar navbar-inverse" role="navigation">
+
+	<div class="container">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <i class="icon-cog"></i>
+    </button>
+    <a class="navbar-brand" href="{{ url_for('user.login_form') }}">Portal<span class="ui-state-active">3</span> Admin Console</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+						
+			<a href="javscript:;" class="dropdown-toggle" data-toggle="dropdown">
+				<i class="icon-cog"></i>
+				Settings
+				<b class="caret"></b>
+			</a>
+			
+			<ul class="dropdown-menu">
+				<li><a href="./account.html">Account Settings</a></li>
+				<li><a href="javascript:;">Privacy Settings</a></li>
+				<li class="divider"></li>
+				<li><a href="javascript:;">Help</a></li>
+			</ul>
+			
+		</li>
+
+		<li class="dropdown">
+						
+			<a href="javscript:;" class="dropdown-toggle" data-toggle="dropdown">
+				<i class="icon-user"></i> 
+				Rod Howard
+				<b class="caret"></b>
+			</a>
+			
+			<ul class="dropdown-menu">
+				<!--<li><a href="javascript:;">My Profile</a></li>-->
+				<!--<li><a href="javascript:;">My Groups</a></li>-->
+				<!--<li class="divider"></li>-->
+				<li><a href="{{ url_for('user.logout') }}">Logout</a></li>
+			</ul>
+			
+		</li>
+    </ul>
+    
+    <form class="navbar-form navbar-right" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control input-sm search-query" placeholder="Search">
+      </div>
+    </form>
+  </div><!-- /.navbar-collapse -->
+</div> <!-- /.container -->
+</nav>
+    
+
+
+
+    
+<div class="subnavbar">
+
+	<div class="subnavbar-inner">
+	
+		<div class="container">
+			
+			<a href="javascript:;" class="subnav-toggle" data-toggle="collapse" data-target=".subnav-collapse">
+		      <span class="sr-only">Toggle navigation</span>
+		      <i class="icon-reorder"></i>
+		      
+		    </a>
+
+			<div class="collapse subnav-collapse">
+				<ul class="mainnav">
+				
+					<li class="dropdown">
+						<a href="#">
+							<i class="icon-th"></i>
+							<span>Status</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-star"></i>
+							<span>Restart</span>
+						</a>
+					</li>
+                    <li class="active">
+						<a href="{{ url_for('servers.index') }}">
+							<i class="icon-bookmark"></i>
+							<span>Servers</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-pencil"></i>
+							<span>Getways</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-flag"></i>
+							<span>Networks</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-refresh"></i>
+							<span>Templates</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-signal"></i>
+							<span>Zones</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-user"></i>
+							<span>Users</span>
+						</a>
+					</li>
+				
+				</ul>
+			</div> <!-- /.subnav-collapse -->
+
+		</div> <!-- /container -->
+	
+	</div> <!-- /subnavbar-inner -->
+
+</div> <!-- /subnavbar -->
+
+
+    
+<div class="main">
+
+    <div class="container">
+
+      <div class="row">
+
+        {% block body %}{% endblock %}
+
+      </div> <!-- /row -->
+
+    </div> <!-- /container -->
+
+</div> <!-- /main -->
+
+
+    
+    
+<div class="footer">
+		
+	<div class="container">
+		
+		<div class="row">
+			
+			<div id="footer-copyright" class="col-md-6">
+				&copy; 2014-15
+			</div> <!-- /span6 -->
+			
+		</div> <!-- /row -->
+		
+	</div> <!-- /container -->
+	
+</div> <!-- /footer -->
+
+
+
+    
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ url_for('static', filename='js/libs/jquery-1.9.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/jquery-ui-1.10.0.custom.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/plugins/flot/jquery.flot.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugins/flot/jquery.flot.pie.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugins/flot/jquery.flot.resize.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/Application.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/charts/area.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts/donut.js') }}"></script>
+
+  </body>
+</html>

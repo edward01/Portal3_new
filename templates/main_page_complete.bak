@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard :: Servers</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">    
+    
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/ui-lightness/jquery-ui-1.10.0.custom.min.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/base-admin-3.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base-admin-3-responsive.css') }}" rel="stylesheet">
+    
+    <link href="{{ url_for('static', filename='css/pages/dashboard.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  </head>
+
+<body>
+
+<nav class="navbar navbar-inverse" role="navigation">
+
+	<div class="container">
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <i class="icon-cog"></i>
+    </button>
+    <a class="navbar-brand" href="{{ url_for('user.login_form') }}">Portal<span class="ui-state-active">3</span> Admin Console</a>
+  </div>
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+						
+			<a href="javscript:;" class="dropdown-toggle" data-toggle="dropdown">
+				<i class="icon-cog"></i>
+				Settings
+				<b class="caret"></b>
+			</a>
+			
+			<ul class="dropdown-menu">
+				<li><a href="./account.html">Account Settings</a></li>
+				<li><a href="javascript:;">Privacy Settings</a></li>
+				<li class="divider"></li>
+				<li><a href="javascript:;">Help</a></li>
+			</ul>
+			
+		</li>
+
+		<li class="dropdown">
+						
+			<a href="javscript:;" class="dropdown-toggle" data-toggle="dropdown">
+				<i class="icon-user"></i> 
+				Rod Howard
+				<b class="caret"></b>
+			</a>
+			
+			<ul class="dropdown-menu">
+				<!--<li><a href="javascript:;">My Profile</a></li>-->
+				<!--<li><a href="javascript:;">My Groups</a></li>-->
+				<!--<li class="divider"></li>-->
+				<li><a href="javascript:;">Logout</a></li>
+			</ul>
+			
+		</li>
+    </ul>
+    
+    <form class="navbar-form navbar-right" role="search">
+      <div class="form-group">
+        <input type="text" class="form-control input-sm search-query" placeholder="Search">
+      </div>
+    </form>
+  </div><!-- /.navbar-collapse -->
+</div> <!-- /.container -->
+</nav>
+    
+
+
+
+    
+<div class="subnavbar">
+
+	<div class="subnavbar-inner">
+	
+		<div class="container">
+			
+			<a href="javascript:;" class="subnav-toggle" data-toggle="collapse" data-target=".subnav-collapse">
+		      <span class="sr-only">Toggle navigation</span>
+		      <i class="icon-reorder"></i>
+		      
+		    </a>
+
+			<div class="collapse subnav-collapse">
+				<ul class="mainnav">
+				
+					<li class="dropdown">
+						<a href="#">
+							<i class="icon-th"></i>
+							<span>Status</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-star"></i>
+							<span>Restart</span>
+						</a>
+					</li>
+                    <li class="active">
+						<a href="{{ url_for('servers.index') }}">
+							<i class="icon-bookmark"></i>
+							<span>Servers</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-pencil"></i>
+							<span>Getways</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-flag"></i>
+							<span>Networks</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-refresh"></i>
+							<span>Templates</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-signal"></i>
+							<span>Zones</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-user"></i>
+							<span>Users</span>
+						</a>
+					</li>
+				
+				</ul>
+			</div> <!-- /.subnav-collapse -->
+
+		</div> <!-- /container -->
+	
+	</div> <!-- /subnavbar-inner -->
+
+</div> <!-- /subnavbar -->
+
+
+    
+<div class="main">
+
+    <div class="container">
+
+      <div class="row">
+
+      	<div class="col-md-4 col-xs-12">
+
+            <div class="widget stacked">
+				<div class="widget-content">
+
+                    <div class="panel-group accordion">
+                        <div class="panel panel-default open">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" data-parent=".accordion" href="#collapseOne">
+                                Collapsible Group Item #1
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                  <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
+                                    <li class="active"><a href="javascript:;">Profile</a></li>
+                                    <li><a href="javascript:;">Profile</a></li>
+                                    <li><a href="javascript:;">Server</a></li>
+                                  </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" data-parent=".accordion" href="#collapseTwo">
+                                Collapsible Group Item #2
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseTwo" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel panel-default">
+                          <div class="panel-heading">
+                            <h4 class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" data-parent=".accordion" href="#collapseThree">
+                                Collapsible Group Item #3
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseThree" class="panel-collapse collapse">
+                            <div class="panel-body">
+                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+	    </div> <!-- /span6 -->
+
+
+      	<div class="col-md-8">
+
+      		<div class="widget stacked">
+				<div class="widget-content">
+
+					<ul id="myTab" class="nav nav-tabs">
+                        <li class="active"><a href="#home" data-toggle="tab">General</a></li>
+                        <!--<li class=""><a href="#profile" data-toggle="tab">Profile</a></li>-->
+                        <!--<li class=""><a href="#profile2" data-toggle="tab">Profile 2</a></li>-->
+                      </ul>
+                      <div class="tab-content">
+                        <div class="tab-pane fade active in" id="home">
+                          <strong>Home</strong>
+                          <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                        </div>
+                        <!--<div class="tab-pane fade" id="profile">-->
+                          <!--<strong>Profile</strong>-->
+                          <!--<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>-->
+                        <!--</div>-->
+                        <!--<div class="tab-pane fade" id="profile2">-->
+                          <!--<strong>Profile</strong>-->
+                          <!--<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>-->
+                        <!--</div>-->
+                      </div>
+
+				</div> <!-- /widget-content -->
+			</div> <!-- /widget -->
+
+	      </div> <!-- /span6 -->
+
+      </div> <!-- /row -->
+
+    </div> <!-- /container -->
+
+</div> <!-- /main -->
+
+
+    
+    
+<div class="footer">
+		
+	<div class="container">
+		
+		<div class="row">
+			
+			<div id="footer-copyright" class="col-md-6">
+				&copy; 2014-15
+			</div> <!-- /span6 -->
+			
+		</div> <!-- /row -->
+		
+	</div> <!-- /container -->
+	
+</div> <!-- /footer -->
+
+
+
+    
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ url_for('static', filename='js/libs/jquery-1.9.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/jquery-ui-1.10.0.custom.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/libs/bootstrap.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/plugins/flot/jquery.flot.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugins/flot/jquery.flot.pie.js') }}"></script>
+<script src="{{ url_for('static', filename='js/plugins/flot/jquery.flot.resize.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/Application.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/charts/area.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts/donut.js') }}"></script>
+
+  </body>
+</html>

@@ -12,7 +12,7 @@ user_app = Blueprint('user', __name__)
 @user_app.route('/', methods=['GET'])
 @user_app.route('/login', methods=['GET'])
 def login_form():
-    return render_template('user/login.html')
+    return render_template('user/login.html', config=app.config)
 
 
 @user_app.route('/', methods=['POST'])
@@ -30,7 +30,7 @@ def login_submit():
             flash('Username or Password is required.')
         else:
             flash('Access Denied.')
-        return render_template('user/login.html')
+        return render_template('user/login.html', config=app.config)
 
 
 @user_app.route('/logout', methods=['GET'])

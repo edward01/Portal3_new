@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Login</title>
+    <title>{{ config.APP_TITLE }}</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes"> 
@@ -74,14 +74,15 @@
 			<h1>Sign In</h1>		
 			
 			<div class="login-fields">
-				
-				<p class="choice">
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div>{{ message|safe }}</div>
-                        {% endfor %}
-                    {% endif %}
-				</p>
+
+                {% if messages %}
+                    <div class="alert alert-danger alert-dismissable">
+                    {% for category, message in messages %}
+                        <div>{{ message|safe }}</div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+
 				
 				<div class="field">
 					<label for="username">Username:</label>

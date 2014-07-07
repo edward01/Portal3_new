@@ -17,3 +17,5 @@ RECAPTCHA_USE_SSL = False
 RECAPTCHA_PUBLIC_KEY = ''
 RECAPTCHA_PRIVATE_KEY = ''
 RECAPTCHA_OPTIONS = {'theme': 'white'}
+
+APP_TITLE = 'Portal 3 Admin Console'
