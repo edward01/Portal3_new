@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import re
 import datetime
 from flask import Flask, render_template, redirect, url_for, request, session
 from config import db_config
@@ -8,6 +9,9 @@ import httplib2
 
 from user.controller import user_app
 from servers.controller import server_app
+
+# user: admin
+# password: iop-098
 
 
 portal_installation_path = '%s/portal3_new/portal' % os.getcwd()
@@ -38,6 +42,7 @@ app.db = conn['test'].test
 # }
 # app.users = db.users
 #
+app.static_regex = re.compile('^.+\.(jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|pdf|txt|tar|wav|bmp|rtf|js|flv|swf|html|htm)$')
 app.secret_key = '\xc5\xa4T\xa7\x13\xa0\x93\x0f\x0e\x8a|Fdtk\x92\x08\x8aFT\xc0\xcf\x05\x11'
 app.permanent_session_lifetime = datetime.timedelta(minutes=15)
 app.session_cookie_name = 'admin_sessid'
@@ -64,18 +69,18 @@ app.register_blueprint(user_app)
 app.register_blueprint(server_app)
 
 
-@app.before_request
-def before_request():
-    if request.endpoint is None and app.static_regex.match(request.path):
-        path_split = request.path.split('/')
-        for static_folder in ('css', 'font', 'img', 'js'):
-            try:
-                return redirect(os.path.join('/static', '/'.join(path_split[path_split.index(static_folder):])))
-            except:
-                continue
-
-    if 'username' not in session and request.endpoint not in ('login_form', 'login_submit', 'static'):
-        return redirect(url_for('login_form'))
+# @app.before_request
+# def before_request():
+#     if request.endpoint is None and app.static_regex.match(request.path):
+#         path_split = request.path.split('/')
+#         for static_folder in ('css', 'font', 'img', 'js'):
+#             try:
+#                 return redirect(os.path.join('/static', '/'.join(path_split[path_split.index(static_folder):])))
+#             except:
+#                 continue
+#
+#     if 'username' not in session and request.endpoint not in ('login_form', 'login_submit', 'static'):
+#         return redirect(url_for('login_form'))
 
 
 @app.errorhandler(404)

@@ -6,7 +6,7 @@ server_app = Blueprint('servers', __name__, url_prefix='/servers')
 
 @server_app.before_request
 def before_request():
-	request.mod = 'servers'
+    request.mod = 'servers'
 
 
 @server_app.route('/', methods=['GET'])

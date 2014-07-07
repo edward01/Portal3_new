@@ -4,9 +4,9 @@ from flask import Blueprint, session, render_template, url_for, request, redirec
 user_app = Blueprint('user', __name__)
 
 
-@user_app.before_request
-def before_request():
-	request.mod = 'user'
+# @user_app.before_request
+# def before_request():
+#     request.mod = 'user'
 
 
 @user_app.route('/', methods=['GET'])
@@ -24,7 +24,7 @@ def login_submit():
     if username in app.passwd and app.passwd[username] == password:
         session['authorized'] = True
         session['username'] = username
-        return redirect(url_for('index'))
+        return redirect(url_for('servers.index'))
     else:
         if username == '' or password == '':
             flash('Username or Password is required.')

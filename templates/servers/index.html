@@ -9,7 +9,7 @@
     
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/bootstrap-responsive.min.css') }}" rel="stylesheet">
-    
+
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
     
@@ -40,7 +40,7 @@
       <span class="sr-only">Toggle navigation</span>
       <i class="icon-cog"></i>
     </button>
-    <a class="navbar-brand" href="./index.html">Base Admin 3.0</a>
+    <a class="navbar-brand" href="{{ url_for('user.login_form') }}">Portal<span class="ui-state-active">3</span> Admin Console</a>
   </div>
 
   <!-- Collect the nav links, forms, and other content for toggling -->
@@ -109,66 +109,53 @@
 			<div class="collapse subnav-collapse">
 				<ul class="mainnav">
 				
-					<li class="active">
-						<a href="./index.html">
-							<i class="icon-home"></i>
-							<span>Home</span>
-						</a>	    				
-					</li>
-					
-					<li class="dropdown">					
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+					<li class="dropdown">
+						<a href="#">
 							<i class="icon-th"></i>
-							<span>Components</span>
-							<b class="caret"></b>
-						</a>	    
-					
-						<ul class="dropdown-menu">
-							<li><a href="./elements.html">Elements</a></li>
-							<li><a href="./forms.html">Form Styles</a></li>
-							<li><a href="./jqueryui.html">jQuery UI</a></li>
-							<li><a href="./charts.html">Charts</a></li>
-							<li><a href="./popups.html">Popups/Notifications</a></li>
-						</ul> 				
+							<span>Status</span>
+						</a>
 					</li>
-					
-					<li class="dropdown">					
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-							<i class="icon-copy"></i>
-							<span>Sample Pages</span>
-							<b class="caret"></b>
-						</a>	    
-					
-						<ul class="dropdown-menu">
-							<li><a href="./pricing.html">Pricing Plans</a></li>
-							<li><a href="./faq.html">FAQ's</a></li>
-							<li><a href="./gallery.html">Gallery</a></li>
-							<li><a href="./reports.html">Reports</a></li>
-							<li><a href="./account.html">User Account</a></li>
-						</ul> 				
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-star"></i>
+							<span>Restart</span>
+						</a>
 					</li>
-					
-					<li class="dropdown">					
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-							<i class="icon-external-link"></i>
-							<span>Extra Pages</span>
-							<b class="caret"></b>
-						</a>	
-					
-						<ul class="dropdown-menu">
-							<li><a href="./login.html">Login</a></li>
-							<li><a href="./signup.html">Signup</a></li>
-							<li><a href="./error.html">Error</a></li>
-							<li class="dropdown-submenu">
-							    <a tabindex="-1" href="#">More options</a>
-							    <ul class="dropdown-menu">
-							      <li><a tabindex="-1" href="#">Second level</a></li>
-
-							      <li><a href="#">Second level</a></li>
-							      <li><a href="#">Second level</a></li>
-							    </ul>
-							  </li>
-						</ul>    				
+                    <li class="active">
+						<a href="#">
+							<i class="icon-bookmark"></i>
+							<span>Servers</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-pencil"></i>
+							<span>Getways</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-flag"></i>
+							<span>Networks</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-refresh"></i>
+							<span>Templates</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-signal"></i>
+							<span>Zones</span>
+						</a>
+					</li>
+                    <li class="dropdown">
+						<a href="#">
+							<i class="icon-user"></i>
+							<span>Users</span>
+						</a>
 					</li>
 				
 				</ul>
