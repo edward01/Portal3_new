@@ -11,4 +11,5 @@ def before_request():
 
 @server_app.route('/', methods=['GET'])
 def index():
+
     return render_template('servers/index.html', config=app.config)
