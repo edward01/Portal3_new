@@ -2,63 +2,89 @@
 {% block title %} Servers {% endblock %}
 {% block body %}
 
+{% set messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    <div class="alert alert-success alert-dismissable">
+    {% for category, message in messages %}
+        <div>{{ message|safe }}</div>
+    {% endfor %}
+    </div>
+{% endif %}
+
+
+<div class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
+    </div>
+
+
 <div class="col-md-4 col-xs-12">
 
     <div class="widget stacked">
-        <div class="widget-content">
+        <div class="widget-header">
+              <i class="icon-pencil"></i>
+              <h3>Server Types</h3>
+            </div> <!-- /.widget-header -->
 
+        <div class="widget-content">
             <div class="panel-group accordion">
+
+                <input type="hidden" id="selServType" name="selServType" value="{{ active_type }}" />
+
+                {% for server_type in server_types %}
+
+                <!--<div class="panel panel-default open">-->
+                {% if active_type == server_type %}
                 <div class="panel panel-default open">
+                {% else %}
+                <div class="panel panel-default">
+                {% endif %}
+
                   <div class="panel-heading">
-                      <h3 class="panel-title">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent=".accordion" href="#collapseOne">
-                        Collapsible Group Item #1
+                    <h3 class="panel-title">
+                      <a class="accordion-toggle" name="aServType__{{ server_type }}" data-toggle="collapse" data-parent=".accordion" href="#collapse_{{ server_type }}">
+                        {{ server_type }}
                       </a>
-                      </h3>
+                    </h3>
                   </div>
-                  <div id="collapseOne" class="panel-collapse collapse in">
+
+                  <!--<div id="collapse_{{ server_type }}" class="panel-collapse collapse in">-->
+                  {% if active_type == server_type %}
+                  <div id="collapse_{{ server_type }}" class="panel-collapse collapse in">
+                  {% else %}
+                  <div id="collapse_{{ server_type }}" class="panel-collapse collapse">
+                  {% endif %}
+
                     <div class="panel-body">
-                          <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
-                            <li class="active"><a href="javascript:;">Profile</a></li>
-                            <li><a href="javascript:;">Profile</a></li>
-                            <li><a href="javascript:;">Server</a></li>
+                        <ul class="nav nav-pills nav-stacked" style="max-width: 300px;" class2="server_list">
+                            <!--<li class="active"><a href="javascript:;">Profile</a></li>-->
+
                             <li>
-                                <button type="button" class="btn btn-primary btn-xs" style="width:100%;">
+                                <button type="button" id="btAdd_{{ server_type }}" name="btAdd_{{ server_type }}" class="btn btn-success btn-sm" style="width:100%;" data-toggle="modal" href="#bigModal">
                                 <span class="icon-plus"></span> Add New Server
                                 </button>
+                                <input type="hidden" name="hf_{{ server_type }}" value="{{ server_type }}" />
                             </li>
-                          </ul>
+
+                            {% for server in grouped_server[server_type] %}
+                            <li>
+                                <a href="javascript:;" class="aServList">
+                                {{ server.server_name }}
+                                <span class="pull-right">
+                                    <button type="button" id="btDel_{{ server_name }}" name="btAdd_{{ server_name }}" class="btn btn-danger btn-xs" sid="{{ server._id }}">
+                                    <span class="icon-remove"></span>
+                                    </button>
+                                </span>
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                        </ul>
                     </div>
                   </div>
                 </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent=".accordion" href="#collapseTwo">
-                        Collapsible Group Item #2
-                      </a>
-                    </h3>
-                  </div>
-                  <div id="collapseTwo" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    </div>
-                  </div>
-                </div>
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">
-                      <a class="accordion-toggle" data-toggle="collapse" data-parent=".accordion" href="#collapseThree">
-                        Collapsible Group Item #3
-                      </a>
-                    </h3>
-                  </div>
-                  <div id="collapseThree" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                    </div>
-                  </div>
-                </div>
+                {% endfor %}
+
             </div>
 
         </div>
@@ -97,6 +123,94 @@
         </div> <!-- /widget-content -->
     </div> <!-- /widget -->
 
-  </div> <!-- /span6 -->
+</div> <!-- /span6 -->
+
+
+<!--Add new server modal-->
+<div id="bigModal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+
+        <div class="modal-content">
+          <form id="add-form" action="/servers/add" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" >Server Type: <span id="new_server_title"></span></h4>
+          </div>
+          <div class="modal-body">
+              <div class="alert alert-danger alert-dismissable">
+                <div id="msg"></div>
+                </div>
+
+              New Server Name:
+              <input type="text" id="txtNewServer" name="txtNewServer" class="form-control input-md" />
+              <input type="hidden" id="hfNewServerType" name="hfNewServerType" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="btCancel" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="btCreateNew">Create Server</button>
+          </div>
+          </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div> <!-- /.modal -->
+
+
+
+<script>
+$(function() {
+    $(".alert").hide();
+
+    $("a[name^='aServType_']").click(function() {
+        $("selServType").val($(this).text().trim());
+    });
+
+    $("button[name^='btAdd_']").click(function() {
+        var ls_server_type = $(this).next().val();
+        $("#new_server_title").text(ls_server_type);
+        $("#hfNewServerType").val(ls_server_type);
+        $("#txtNewServer").val('');
+        $("#txtNewServer").focus();
+    });
+
+
+    $("#btCancel").click(function() {
+        $(".alert").hide();
+    });
+
+
+    $("#txtNewServer").keypress(function(e) {
+        if(e.which == 13)
+            return submit_form();
+    });
+
+    $("#add-form").submit(function(event) {
+        //event.preventDefault();
+        return submit_form();
+    });
+
+    $("button[name^='btAdd_']").click(function() {
+        alert($(this).attr('sid'));
+    });
+
+
+    $(".aServList").click(function() {
+        $("ul.nav > li").removeClass("active");
+        $(this).parent().addClass("active");
+    });
+
+});
+
+function submit_form() {
+    if($("#txtNewServer").val().trim() == '') {
+        $("#msg").text('Server Name is required.');
+        $(".alert").show();
+        $("#txtNewServer").focus()
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+</script>
 
 {% endblock %}

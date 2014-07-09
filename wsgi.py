@@ -22,7 +22,7 @@ app.config.from_object('config')
 
 # database
 conn = pymongo_safe.MongoHandler(db_config)
-app.db = conn['test'].test
+app.db = conn['portal'].portal
 
 # app.templates = db.templates
 # app.template_properties = db.template_properties

@@ -2,7 +2,7 @@ import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 db_config = {
-    'test': dict(name='test', location=['127.0.0.1'], authenticate=False)
+    'portal': dict(name='portal', location=['127.0.0.1'], authenticate=False)
 }
 
 DEBUG = True
