@@ -71,7 +71,7 @@
                                 <a href="javascript:;" class="aServList">
                                 {{ server.server_name }}
                                 <span class="pull-right">
-                                    <button type="button" id="btDel_{{ server_name }}" name="btAdd_{{ server_name }}" class="btn btn-danger btn-xs" sid="{{ server._id }}">
+                                    <button type="button" id="btDel_{{ server_name }}" name="btDel_{{ server_name }}" class="btn btn-danger btn-xs msgbox-confirm" sid="{{ server._id }}">
                                     <span class="icon-remove"></span>
                                     </button>
                                 </span>
@@ -160,10 +160,12 @@
 $(function() {
     $(".alert").hide();
 
+    //
     $("a[name^='aServType_']").click(function() {
         $("selServType").val($(this).text().trim());
     });
 
+    // add server
     $("button[name^='btAdd_']").click(function() {
         var ls_server_type = $(this).next().val();
         $("#new_server_title").text(ls_server_type);
@@ -173,6 +175,7 @@ $(function() {
     });
 
 
+    // Cancel of 'add server' modal
     $("#btCancel").click(function() {
         $(".alert").hide();
     });
@@ -188,7 +191,7 @@ $(function() {
         return submit_form();
     });
 
-    $("button[name^='btAdd_']").click(function() {
+    $("button[name^='btDel_']").click(function() {
         alert($(this).attr('sid'));
     });
 

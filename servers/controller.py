@@ -54,14 +54,5 @@ def server_delete(server_id):
 
 
 @server_app.route('/sample', methods=['GET'])
-def sample(active_type=None):
-    # load server types
-    grouped_server = {}
-    for server in app.db.servers.find():
-        if server['type'] not in grouped_server:
-            grouped_server[server['type']] = []
-        grouped_server[server['type']].append(server)
-
-    server_types = grouped_server.keys()
-    return render_template('test_page.html', config=app.config, grouped_server=grouped_server,
-                           server_types=server_types, active_type=active_type)
+def sample():
+    return render_template('test_page.html')
