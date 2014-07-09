@@ -18,8 +18,6 @@
     </div>
 
 
-<form id="server-form" action="/servers/save" method="post">
-
 <div class="col-md-4 col-xs-12">
 
     <div class="widget stacked">
@@ -30,8 +28,6 @@
 
         <div class="widget-content">
             <div class="panel-group accordion">
-
-                <input type="hidden" id="hf_selType" name="hf_selType" value="{{ active_type }}" />
 
                 {% for server_type in server_types %}
 
@@ -69,8 +65,12 @@
                             </li>
 
                             {% for server in grouped_server[server_type] %}
+                            {% if active_name == server.server_name %}
+                            <li class="active">
+                            {% else %}
                             <li>
-                                <a href="javascript:;" class="aServList">
+                            {% endif %}
+                                <a href="javascript:;" class="aServList" sid="{{ server._id }}">
                                 {{ server.server_name }}
                                 <span class="pull-right">
                                     <button type="button" id="btDel_{{ server_name }}" name="btDel_{{ server_name }}" class="btn btn-danger btn-xs msgbox-confirm" sid="{{ server._id }}" snm="{{ server.server_name }}">
@@ -100,35 +100,91 @@
     <div class="widget stacked">
         <div class="widget-content">
 
-            <ul id="myTab" class="nav nav-tabs">
-                <li class="active"><a href="#home" data-toggle="tab">General</a></li>
-                <!--<li class=""><a href="#profile" data-toggle="tab">Profile</a></li>-->
-                <!--<li class=""><a href="#profile2" data-toggle="tab">Profile 2</a></li>-->
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane fade active in" id="home">
-                  <strong>Home</strong>
-                  <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-                </div>
-                <!--<div class="tab-pane fade" id="profile">-->
-                  <!--<strong>Profile</strong>-->
-                  <!--<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>-->
-                <!--</div>-->
-                <!--<div class="tab-pane fade" id="profile2">-->
-                  <!--<strong>Profile</strong>-->
-                  <!--<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>-->
-                <!--</div>-->
-              </div>
+          <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#home" data-toggle="tab">General</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade active in" id="home">
 
-              <button class="login-action btn btn-primary">Save</button>
+                <form id="server-form" action="/servers/save" method="post" role="form" class="form-horizontal">
+
+                    <input type="hidden" id="hf_selType" name="hf_selType" value="{{ active_type }}" />
+                    <input type="hidden" id="hf_selID" name="hf_selID" />
+
+                    <div class="form-group">
+                        <label class="col-md-3">Server Name:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tServerName" name="tServerName" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group">
+                        <label class="col-md-3">Type:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tServerType" name="tServerType" class="form-control" readonly />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group">
+                        <label class="col-md-3">IP Address:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tIPAddress" name="tIPAddress" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group" id="dvSharedSecret">
+                        <label class="col-md-3">Shared Secret:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tSharedSecret" name="tIPAddress" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group" id="dvPort">
+                        <label class="col-md-3">Port:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tPort" name="tPort" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group" id="dvPrincipal">
+                        <label class="col-md-3">Principal:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tPrincipal" name="tPrincipal" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group" id="dvCredentials">
+                        <label class="col-md-3">Credentials:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tCredentials" name="tCredentials" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group">
+                        <label class="col-md-3">Timeout (in seconds):</label>
+                        <div class="col-md-9">
+                        <input type="text" id="tTimeout" name="tTimeout" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="col-md-3">Advanced Configuration:</label>
+                        <div class="col-md-9">
+                        <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="6"></textarea>
+                        </div>
+                    </div> <!-- /.form-group -->
+
+
+                    <div class="form-group">
+                        <div class="col-md-12" style="text-align: right;">
+                        <button type="submit" class="btn btn-primary" id="btEdit" name="btEdit" style="width: 80px;">Save</button>
+                        <!--<button type="button" class="btn btn-default" id="btCancelMain" name="btCancelMain" style="width: 80px;">Reset</button>-->
+                        </div>
+                    </div> <!-- /.form-group -->
+
+                </form> <!-- server-form-->
+
+            </div>
+          </div>
 
         </div> <!-- /widget-content -->
     </div> <!-- /widget -->
 
 </div> <!-- /span6 -->
 
-
-</form>
 
 
 <!--Add new server modal-->
@@ -164,13 +220,14 @@
 <script>
 $(function() {
     $(".alert").hide();
+    $("#home *").hide();
 
-    //
+    //-- Server Type > click
     $("a[name^='aServType_']").click(function() {
         $("#hf_selType").val($(this).text().trim());
     });
 
-    // add server
+    //-- Add Server button > click
     $("button[name^='btAdd_']").click(function() {
         var ls_server_type = $(this).next().val();
         $("#new_server_title").text(ls_server_type);
@@ -180,7 +237,7 @@ $(function() {
     });
 
 
-    // Cancel of 'add server' modal
+    //-- Cancel new server button > click
     $("#btCancel").click(function() {
         $(".alert").hide();
     });
@@ -197,7 +254,7 @@ $(function() {
     });
 
 
-    // Delete Server Name
+    //-- Delete Server button > click
     $("button[name^='btDel_']").click(function() {
         //alert($(this).attr('sid'));
         server_id = $(this).attr('sid');
@@ -216,13 +273,60 @@ $(function() {
     });
 
 
+    //-- Server Name > click
     $(".aServList").click(function() {
         $("ul.nav-pills > li").removeClass("active");
         $(this).parent().addClass("active");
+
+        // load server details
+        $("#home *").hide();
+        server_id = $(this).attr('sid');
+        $("#hf_selID").val(server_id);
+
+        $.get('/servers/load/'+server_id, function(data) {
+            srvr = jQuery.parseJSON(data);
+            $("#tServerName").val(srvr.server_name);
+            $("#tServerType").val(srvr.type);
+            $("#tIPAddress").val(srvr.ip_address);
+            $("#tSharedSecret").val(srvr.shared_secret);
+            $("#tPort").val(srvr.port);
+            $("#tPrincipal").val(srvr.principal);
+            $("#tCredentials").val(srvr.credentials);
+            $("#tTimeout").val(srvr.timeout);
+            $("#tAdvConfig").val(srvr.advanced_config);
+
+
+            $("#dvSharedSecret").hide();
+            $("#dvPort").hide();
+            $("#dvPrincipal").hide();
+            $("#dvCredentials").hide();
+
+            if (srvr.type == 'AAA') {
+                $("#dvSharedSecret").show();
+            }
+            else if ('|SPS|Kenan|Datapower|'.indexOf('|'+srvr.type+'|') > 0) {
+                $("#dvPort").show();
+            }
+            else if ('|SDB|SDB_DBM|BPC|'.indexOf('|'+srvr.type+'|') > 0) {
+                $("#dvPort").show();
+                $("#dvPrincipal").show();
+                $("#dvCredentials").show();
+            }
+
+            $("#home *").show();
+        });
     });
+
+
+//    //-- 'Main Form' Cancel > click
+//    $("#btCancelMain").click(function() {
+//        $("#server-form :text").val('');
+//        $("#server-form textarea").val('');
+//    });
 
 });
 
+//-- Create new server > submit
 function submit_form() {
     if($("#txtNewServer").val().trim() == '') {
         $("#msg").text('Server Name is required.');

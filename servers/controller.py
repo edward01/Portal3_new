@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from flask import Blueprint, session, render_template, url_for, request, redirect, flash, current_app as app
 from bson.objectid import ObjectId
+from bson.json_util import dumps
 from pprint import pprint
 
 server_app = Blueprint('servers', __name__, url_prefix='/servers')
@@ -13,7 +14,8 @@ def before_request():
 
 @server_app.route('/', methods=['GET'])
 @server_app.route('/<active_type>', methods=['GET'])
-def index(active_type=None):
+@server_app.route('/<active_type>/<active_name>', methods=['GET'])
+def index(active_type=None, active_name=None):
     # load server types
     grouped_server = {}
     for server in app.db.servers.find():
@@ -23,7 +25,7 @@ def index(active_type=None):
 
     server_types = grouped_server.keys()
     return render_template('servers/index.html', config=app.config, grouped_server=grouped_server,
-                           server_types=server_types, active_type=active_type)
+                           server_types=server_types, active_type=active_type, active_name=active_name)
 
 
 @server_app.route('/add', methods=['POST'])
@@ -46,7 +48,7 @@ def server_add():
     else:
         flash('server %s.%s already exists.' % (server_type, server_name), 'error')
 
-    return redirect(url_for('.index', active_type=server_type))
+    return redirect(url_for('.index', active_type=server_type, active_name=server_name))
 
 
 @server_app.route('/delete/<server_id>', methods=['POST'])
@@ -70,6 +72,47 @@ def server_delete(server_id):
         flash('Unable to delete "%s". Server is currently in use.' % (server['server_name']), 'message')
 
     return redirect(url_for('.index', active_type=server_type))
+
+
+@server_app.route('/load/<server_id>', methods=['GET'])
+def server_load(server_id):
+    server = app.db.servers.find_one({'_id': ObjectId(server_id)})
+    return dumps(server)
+
+
+@server_app.route('/save', methods=['POST'])
+def server_save():
+    server_type = request.form['hf_selType']
+    server_id = request.form['hf_selID']
+    server = app.db.servers.find_one({'_id': ObjectId(server_id)})
+
+    if server is None:
+        return redirect(url_for('.index'))
+
+    # for key in request.form:
+    #     pprint(key)
+
+
+    # sSharedSecret = '' if request.form.get('tSharedSecret'] is None else request.form['tSharedSecret']
+
+    new_server = {
+        '_id': ObjectId(server_id),
+        'description': '',
+        'server_name': request.form.get('tServerName'),
+        'advanced_config': request.form.get('tAdvConfig'),
+        'ip_address': request.form.get('tIPAddress'),
+        'timeout': request.form.get('tTimeout'),
+        'shared_secret': request.form.get('tSharedSecret'),
+        'type': server_type,
+        'credentials': request.form.get('tCredentials'),
+        'port': request.form.get('tPort'),
+        'principal': request.form.get('tPrincipal')
+    }
+
+    app.db.servers.save(new_server)
+    flash('Server "%s" updated.' % (server['server_name']), 'message')
+
+    return redirect(url_for('.index', active_type=server_type, active_name=request.form.get('tServerName')))
 
 
 @server_app.route('/sample', methods=['GET'])
