@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from flask import Blueprint, session, render_template, url_for, request, redirect, flash, current_app as app
+from bson.objectid import ObjectId
 from pprint import pprint
 
 server_app = Blueprint('servers', __name__, url_prefix='/servers')
@@ -50,6 +51,24 @@ def server_add():
 
 @server_app.route('/delete/<server_id>', methods=['POST'])
 def server_delete(server_id):
+    server_type = request.form['hf_selType']
+    server = app.db.servers.find_one({'_id': ObjectId(server_id)})
+
+    if server is None:
+        return redirect(url_for('.index'))
+
+    gateway_used_cnt = 0
+    for gateway in app.db.gateways.find():
+        if 'servers' in gateway:
+            if server_id in gateway['servers']:
+                gateway_used_cnt += 1
+
+    if gateway_used_cnt == 0:
+        app.db.servers.remove({'_id': ObjectId(server_id)})
+        flash('Server "%s" deleted.' % (server['server_name']), 'message')
+    else:
+        flash('Unable to delete "%s". Server is currently in use.' % (server['server_name']), 'message')
+
     return redirect(url_for('.index', active_type=server_type))
 
 

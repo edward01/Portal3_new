@@ -18,6 +18,8 @@
     </div>
 
 
+<form id="server-form" action="/servers/save" method="post">
+
 <div class="col-md-4 col-xs-12">
 
     <div class="widget stacked">
@@ -29,7 +31,7 @@
         <div class="widget-content">
             <div class="panel-group accordion">
 
-                <input type="hidden" id="selServType" name="selServType" value="{{ active_type }}" />
+                <input type="hidden" id="hf_selType" name="hf_selType" value="{{ active_type }}" />
 
                 {% for server_type in server_types %}
 
@@ -42,7 +44,7 @@
 
                   <div class="panel-heading">
                     <h3 class="panel-title">
-                      <a class="accordion-toggle" name="aServType__{{ server_type }}" data-toggle="collapse" data-parent=".accordion" href="#collapse_{{ server_type }}">
+                      <a class="accordion-toggle" name="aServType_{{ server_type }}" data-toggle="collapse" data-parent=".accordion" href="#collapse_{{ server_type }}">
                         {{ server_type }}
                       </a>
                     </h3>
@@ -71,7 +73,7 @@
                                 <a href="javascript:;" class="aServList">
                                 {{ server.server_name }}
                                 <span class="pull-right">
-                                    <button type="button" id="btDel_{{ server_name }}" name="btDel_{{ server_name }}" class="btn btn-danger btn-xs msgbox-confirm" sid="{{ server._id }}">
+                                    <button type="button" id="btDel_{{ server_name }}" name="btDel_{{ server_name }}" class="btn btn-danger btn-xs msgbox-confirm" sid="{{ server._id }}" snm="{{ server.server_name }}">
                                     <span class="icon-remove"></span>
                                     </button>
                                 </span>
@@ -126,6 +128,9 @@
 </div> <!-- /span6 -->
 
 
+</form>
+
+
 <!--Add new server modal-->
 <div id="bigModal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog">
@@ -162,7 +167,7 @@ $(function() {
 
     //
     $("a[name^='aServType_']").click(function() {
-        $("selServType").val($(this).text().trim());
+        $("#hf_selType").val($(this).text().trim());
     });
 
     // add server
@@ -191,13 +196,28 @@ $(function() {
         return submit_form();
     });
 
+
+    // Delete Server Name
     $("button[name^='btDel_']").click(function() {
-        alert($(this).attr('sid'));
+        //alert($(this).attr('sid'));
+        server_id = $(this).attr('sid');
+        $.msgbox("This will delete " + $(this).attr('snm') + " server, Proceed?", {
+            type: "confirm",
+            buttons : [
+                {type: "submit", value: "Yes"},
+                {type: "submit", value: "No"},
+            ]
+        }, function(result) {
+            if (result == 'Yes') {
+                $('#server-form').attr('action', '/servers/delete/'+server_id);
+                $('#server-form').submit();
+            }
+        });
     });
 
 
     $(".aServList").click(function() {
-        $("ul.nav > li").removeClass("active");
+        $("ul.nav-pills > li").removeClass("active");
         $(this).parent().addClass("active");
     });
 
@@ -207,7 +227,7 @@ function submit_form() {
     if($("#txtNewServer").val().trim() == '') {
         $("#msg").text('Server Name is required.');
         $(".alert").show();
-        $("#txtNewServer").focus()
+        $("#txtNewServer").focus();
         return false;
     }
     else {
