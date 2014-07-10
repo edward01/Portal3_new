@@ -105,7 +105,6 @@ def server_save():
 
     session['server_id'] = server_id
 
-
     new_server = {
         '_id': ObjectId(server_id),
         'description': '',

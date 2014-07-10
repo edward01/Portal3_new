@@ -113,6 +113,10 @@ def index():
 def sample():
     return render_template('test_page.html')
 
+@app.route('/sample2', methods=['GET'])
+def sample2():
+    return render_template('test_page2.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

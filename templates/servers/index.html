@@ -3,6 +3,25 @@
 {% block body %}
 
 
+<link href="{{ url_for('static', filename='css/codemirror.css') }}" rel="stylesheet">
+<script src="{{ url_for('static', filename='js/libs/codemirror.js') }}"></script>
+<script src="{{ url_for('static', filename='js/mode/xml.js') }}"></script>
+
+<style type="text/css">
+    .CodeMirror {
+    	border: 1px solid #CCCCCC;
+		border-radius: 4px 4px 4px 4px;
+		height: 320px;
+		width: 100%;
+	}
+	.CodeMirror-scroll {
+		overflow-y: hidden;
+		overflow-x: auto;
+	}
+</style>
+
+
+
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
@@ -13,6 +32,7 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
+
 
 
 <div class="col-md-4 col-xs-12">
@@ -150,7 +170,7 @@
                 <div class="tab-pane fade form-horizontal" id="tbAdvConfig">
                     <div class="form-group" style="">
                         <div class="col-md-12">
-                        <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="20" value="{{ server_dtls.advanced_config }}" ></textarea>
+                            <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="20">{{ server_dtls.advanced_config }}</textarea>
                         </div>
                     </div> <!-- /.form-group -->
                 </div>
@@ -161,8 +181,6 @@
                     <!--<button type="button" class="btn btn-default" id="btCancelMain" name="btCancelMain" style="width: 80px;">Reset</button>-->
                     </div>
                 </div> <!-- /.form-group -->
-
-
 
           </div>
 
@@ -208,10 +226,7 @@
 <script>
 $(function() {
     $("#new_server_alert").hide();
-    //$("#home *").hide();
 
-//    if ($("#hfAlert").val() != '')
-//        $(".alert").css('display','block');
 
 
     if ($("#hf_selName").val() != 'None') {
@@ -290,6 +305,7 @@ $(function() {
             $("#tCredentials").val(srvr.credentials);
             $("#tTimeout").val(srvr.timeout);
             $("#tAdvConfig").val(srvr.advanced_config);
+            editor.setValue(srvr.advanced_config);
 
             toggle_fields(srvr.type);
         });
@@ -300,6 +316,12 @@ $(function() {
     //-- clears alert notification on mouse clicks
     $("#server-form").click(function() { $("#main_alert").hide(); });
     $("#dvServerList").click(function() { $("#main_alert").hide(); });
+
+
+    //-- 2nd tab click
+//    $("*").click(function() {
+//        setTimeout(function(){editor.refresh();}, 0);
+//    });
 
 });
 
@@ -335,6 +357,16 @@ function toggle_fields(srvr_type) {
         $("#dvCredentials").show();
     }
 }
+
+
+//-- textarea codemirror
+var editor = CodeMirror.fromTextArea(document.getElementById("tAdvConfig"), {
+    mode: "application/xml",
+    styleActiveLine: true,
+    lineNumbers: true,
+    lineWrapping: true
+});
+
 </script>
 
 {% endblock %}

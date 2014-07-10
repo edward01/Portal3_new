@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard :: Servers</title>
+
+
+      <link href="{{ url_for('static', filename='css/codemirror.css') }}" rel="stylesheet">
+        <script src="{{ url_for('static', filename='js/libs/codemirror.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/mode/xml.js') }}"></script>
+        <style type="text/css">
+            .CodeMirror {
+                border: 1px solid #CCCCCC;
+                border-radius: 4px 4px 4px 4px;
+                height: 320px;
+                width: 95%
+            }
+            .CodeMirror-scroll {
+                overflow-y: hidden;
+                overflow-x: auto;
+            }
+        </style>
+  </head>
+
+<body>
+
+
+<textarea id="tAdvConfig" name="tAdvConfig" rows="20">testing</textarea>
+
+
+
+<script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("tAdvConfig"), {
+        mode: "text/html",
+        lineNumbers: true
+      });
+    </script>
+
+
+
+  </body>
+</html>
