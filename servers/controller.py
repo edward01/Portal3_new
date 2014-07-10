@@ -24,8 +24,14 @@ def index(active_type=None, active_name=None):
         grouped_server[server['type']].append(server)
 
     server_types = grouped_server.keys()
+
+    server_dtls = None
+    if active_name is not None:
+        server_dtls = app.db.servers.find_one({'_id': ObjectId(session['server_id'])})
+
     return render_template('servers/index.html', config=app.config, grouped_server=grouped_server,
-                           server_types=server_types, active_type=active_type, active_name=active_name)
+                           server_types=server_types, active_type=active_type, active_name=active_name,
+                           server_dtls=server_dtls)
 
 
 @server_app.route('/add', methods=['POST'])
@@ -44,9 +50,9 @@ def server_add():
             'timeout': 3
         }
         app.db.servers.insert(server)
-        flash('New server created.', 'message')
+        flash('New server <strong>%s</strong> created.' % server_name, 'message')
     else:
-        flash('server %s.%s already exists.' % (server_type, server_name), 'error')
+        flash('server <strong>%s.%s</strong> already exists.' % (server_type, server_name), 'error')
 
     return redirect(url_for('.index', active_type=server_type, active_name=server_name))
 
@@ -67,9 +73,9 @@ def server_delete(server_id):
 
     if gateway_used_cnt == 0:
         app.db.servers.remove({'_id': ObjectId(server_id)})
-        flash('Server "%s" deleted.' % (server['server_name']), 'message')
+        flash('Server <strong>%s</strong> deleted.' % (server['server_name']), 'message')
     else:
-        flash('Unable to delete "%s". Server is currently in use.' % (server['server_name']), 'message')
+        flash('Unable to delete <strong>%s</strong>. Server is currently in use.' % (server['server_name']), 'message')
 
     return redirect(url_for('.index', active_type=server_type))
 
@@ -84,16 +90,18 @@ def server_load(server_id):
 def server_save():
     server_type = request.form['hf_selType']
     server_id = request.form['hf_selID']
-    server = app.db.servers.find_one({'_id': ObjectId(server_id)})
+    if server_id is None or server_id == '':
+        return redirect(url_for('.index'))
 
+    server = app.db.servers.find_one({'_id': ObjectId(server_id)})
     if server is None:
         return redirect(url_for('.index'))
 
     # for key in request.form:
     #     pprint(key)
 
+    session['server_id'] = server_id
 
-    # sSharedSecret = '' if request.form.get('tSharedSecret'] is None else request.form['tSharedSecret']
 
     new_server = {
         '_id': ObjectId(server_id),
@@ -110,11 +118,6 @@ def server_save():
     }
 
     app.db.servers.save(new_server)
-    flash('Server "%s" updated.' % (server['server_name']), 'message')
+    flash('Server <strong>%s</strong> updated.' % (server['server_name']), 'message')
 
     return redirect(url_for('.index', active_type=server_type, active_name=request.form.get('tServerName')))
-
-
-@server_app.route('/sample', methods=['GET'])
-def sample():
-    return render_template('test_page.html')

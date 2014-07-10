@@ -93,5 +93,11 @@ def index():
     return redirect(url_for('user.login_form'))
 
 
+
+@app.route('/sample', methods=['GET'])
+def sample():
+    return render_template('test_page.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)

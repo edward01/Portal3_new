@@ -4,18 +4,13 @@
 
 {% set messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
-    <div class="alert alert-success alert-dismissable">
+    <div class="alert alert-success alert-dismissable" id="main_alert">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {% for category, message in messages %}
         <div>{{ message|safe }}</div>
     {% endfor %}
     </div>
 {% endif %}
-
-
-<div class="alert alert-success alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      <strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
-    </div>
 
 
 <div class="col-md-4 col-xs-12">
@@ -70,7 +65,7 @@
                             {% else %}
                             <li>
                             {% endif %}
-                                <a href="javascript:;" class="aServList" sid="{{ server._id }}">
+                                <a href="javascript:;" class="aServList" sid="{{ server._id }}" snm="{{ server.server_name }}">
                                 {{ server.server_name }}
                                 <span class="pull-right">
                                     <button type="button" id="btDel_{{ server_name }}" name="btDel_{{ server_name }}" class="btn btn-danger btn-xs msgbox-confirm" sid="{{ server._id }}" snm="{{ server.server_name }}">
@@ -102,82 +97,86 @@
 
           <ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#home" data-toggle="tab">General</a></li>
+            <li class=""><a href="#tbAdvConfig" data-toggle="tab">Advanced Configuration</a></li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane fade active in" id="home">
 
-                <form id="server-form" action="/servers/save" method="post" role="form" class="form-horizontal">
+            <form id="server-form" action="/servers/save" method="post" role="form" class="">
+
+                <div class="tab-pane fade active in form-horizontal" id="home">
 
                     <input type="hidden" id="hf_selType" name="hf_selType" value="{{ active_type }}" />
-                    <input type="hidden" id="hf_selID" name="hf_selID" />
+                    <input type="hidden" id="hf_selName" name="hf_selName" value="{{ active_name }}" />
+                    <input type="hidden" id="hf_selID" name="hf_selID" value="{{ server_dtls._id }}" />
 
                     <div class="form-group">
                         <label class="col-md-3">Server Name:</label>
                         <div class="col-md-9">
-                        <input type="text" id="tServerName" name="tServerName" class="form-control" />
+                        <input type="text" id="tServerName" name="tServerName" class="form-control" value="{{ server_dtls.server_name }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group">
                         <label class="col-md-3">Type:</label>
                         <div class="col-md-9">
-                        <input type="text" id="tServerType" name="tServerType" class="form-control" readonly />
+                        <input type="text" id="tServerType" name="tServerType" class="form-control" readonly value="{{ server_dtls.type }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group">
                         <label class="col-md-3">IP Address:</label>
                         <div class="col-md-9">
-                        <input type="text" id="tIPAddress" name="tIPAddress" class="form-control" />
+                        <input type="text" id="tIPAddress" name="tIPAddress" class="form-control" value="{{ server_dtls.ip_address }}"  />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group" id="dvSharedSecret">
                         <label class="col-md-3">Shared Secret:</label>
                         <div class="col-md-9">
-                        <input type="text" id="tSharedSecret" name="tIPAddress" class="form-control" />
+                        <input type="text" id="tSharedSecret" name="tSharedSecret" class="form-control" value="{{ server_dtls.shared_secret }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group" id="dvPort">
                         <label class="col-md-3">Port:</label>
                         <div class="col-md-9">
-                        <input type="text" id="tPort" name="tPort" class="form-control" />
+                        <input type="text" id="tPort" name="tPort" class="form-control" value="{{ server_dtls.port }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group" id="dvPrincipal">
                         <label class="col-md-3">Principal:</label>
                         <div class="col-md-9">
-                        <input type="text" id="tPrincipal" name="tPrincipal" class="form-control" />
+                        <input type="text" id="tPrincipal" name="tPrincipal" class="form-control" value="{{ server_dtls.principal }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group" id="dvCredentials">
                         <label class="col-md-3">Credentials:</label>
                         <div class="col-md-9">
-                        <input type="text" id="tCredentials" name="tCredentials" class="form-control" />
+                        <input type="text" id="tCredentials" name="tCredentials" class="form-control" value="{{ server_dtls.credentials }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group">
                         <label class="col-md-3">Timeout (in seconds):</label>
                         <div class="col-md-9">
-                        <input type="text" id="tTimeout" name="tTimeout" class="form-control" />
+                        <input type="text" id="tTimeout" name="tTimeout" class="form-control" value="{{ server_dtls.timeout }}" />
                         </div>
                     </div> <!-- /.form-group -->
 
-                    <div class="form-group">
-                        <label class="col-md-3">Advanced Configuration:</label>
-                        <div class="col-md-9">
-                        <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="6"></textarea>
+                </div>
+
+                <div class="tab-pane fade form-horizontal" id="tbAdvConfig">
+                    <div class="form-group" style="">
+                        <div class="col-md-12">
+                        <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="20" value="{{ server_dtls.advanced_config }}" ></textarea>
                         </div>
                     </div> <!-- /.form-group -->
+                </div>
 
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align: right;">
+                    <button type="submit" class="btn btn-primary" id="btEdit" name="btEdit" style="width: 80px;">Save</button>
+                    <!--<button type="button" class="btn btn-default" id="btCancelMain" name="btCancelMain" style="width: 80px;">Reset</button>-->
+                    </div>
+                </div> <!-- /.form-group -->
 
-                    <div class="form-group">
-                        <div class="col-md-12" style="text-align: right;">
-                        <button type="submit" class="btn btn-primary" id="btEdit" name="btEdit" style="width: 80px;">Save</button>
-                        <!--<button type="button" class="btn btn-default" id="btCancelMain" name="btCancelMain" style="width: 80px;">Reset</button>-->
-                        </div>
-                    </div> <!-- /.form-group -->
+            </form> <!-- server-form-->
 
-                </form> <!-- server-form-->
-
-            </div>
           </div>
 
         </div> <!-- /widget-content -->
@@ -198,7 +197,7 @@
             <h4 class="modal-title" >Server Type: <span id="new_server_title"></span></h4>
           </div>
           <div class="modal-body">
-              <div class="alert alert-danger alert-dismissable">
+              <div class="alert alert-danger alert-dismissable" id="new_server_alert">
                 <div id="msg"></div>
                 </div>
 
@@ -219,8 +218,17 @@
 
 <script>
 $(function() {
-    $(".alert").hide();
-    $("#home *").hide();
+    $("#new_server_alert").hide();
+    //$("#home *").hide();
+
+//    if ($("#hfAlert").val() != '')
+//        $(".alert").css('display','block');
+
+
+    if ($("#hf_selName").val() != 'None') {
+        toggle_fields($("#tServerType").val());
+    }
+
 
     //-- Server Type > click
     $("a[name^='aServType_']").click(function() {
@@ -239,7 +247,7 @@ $(function() {
 
     //-- Cancel new server button > click
     $("#btCancel").click(function() {
-        $(".alert").hide();
+        $("#new_server_alert").hide();
     });
 
 
@@ -257,7 +265,7 @@ $(function() {
     //-- Delete Server button > click
     $("button[name^='btDel_']").click(function() {
         //alert($(this).attr('sid'));
-        server_id = $(this).attr('sid');
+        var server_id = $(this).attr('sid');
         $.msgbox("This will delete " + $(this).attr('snm') + " server, Proceed?", {
             type: "confirm",
             buttons : [
@@ -279,12 +287,11 @@ $(function() {
         $(this).parent().addClass("active");
 
         // load server details
-        $("#home *").hide();
-        server_id = $(this).attr('sid');
+        var server_id = $(this).attr('sid');
         $("#hf_selID").val(server_id);
 
         $.get('/servers/load/'+server_id, function(data) {
-            srvr = jQuery.parseJSON(data);
+            var srvr = jQuery.parseJSON(data);
             $("#tServerName").val(srvr.server_name);
             $("#tServerType").val(srvr.type);
             $("#tIPAddress").val(srvr.ip_address);
@@ -295,25 +302,7 @@ $(function() {
             $("#tTimeout").val(srvr.timeout);
             $("#tAdvConfig").val(srvr.advanced_config);
 
-
-            $("#dvSharedSecret").hide();
-            $("#dvPort").hide();
-            $("#dvPrincipal").hide();
-            $("#dvCredentials").hide();
-
-            if (srvr.type == 'AAA') {
-                $("#dvSharedSecret").show();
-            }
-            else if ('|SPS|Kenan|Datapower|'.indexOf('|'+srvr.type+'|') > 0) {
-                $("#dvPort").show();
-            }
-            else if ('|SDB|SDB_DBM|BPC|'.indexOf('|'+srvr.type+'|') > 0) {
-                $("#dvPort").show();
-                $("#dvPrincipal").show();
-                $("#dvCredentials").show();
-            }
-
-            $("#home *").show();
+            toggle_fields(srvr.type);
         });
     });
 
@@ -330,12 +319,32 @@ $(function() {
 function submit_form() {
     if($("#txtNewServer").val().trim() == '') {
         $("#msg").text('Server Name is required.');
-        $(".alert").show();
+        $("#new_server_alert").show();
         $("#txtNewServer").focus();
         return false;
     }
     else {
         return true;
+    }
+}
+
+
+function toggle_fields(srvr_type) {
+    $("#dvSharedSecret").hide();
+    $("#dvPort").hide();
+    $("#dvPrincipal").hide();
+    $("#dvCredentials").hide();
+
+    if (srvr_type == 'AAA') {
+        $("#dvSharedSecret").show();
+    }
+    else if ('|SPS|Kenan|Datapower|'.indexOf('|'+srvr_type+'|') > 0) {
+        $("#dvPort").show();
+    }
+    else if ('|SDB|SDB_DBM|BPC|'.indexOf('|'+srvr_type+'|') > 0) {
+        $("#dvPort").show();
+        $("#dvPrincipal").show();
+        $("#dvCredentials").show();
     }
 }
 </script>
