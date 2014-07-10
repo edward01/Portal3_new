@@ -1,12 +1,9 @@
 #!/usr/bin/env python
 from flask import Blueprint, session, render_template, url_for, request, redirect, flash, current_app as app
+from pprint import pprint
 
 user_app = Blueprint('user', __name__)
 
-
-# @user_app.before_request
-# def before_request():
-#     request.mod = 'user'
 
 
 @user_app.route('/', methods=['GET'])
@@ -21,7 +18,9 @@ def login_submit():
     username = request.form['username']
     password = request.form['password']
 
-    if username in app.passwd and app.passwd[username] == password:
+    users = app.db.users.find_one({'name': username, 'password': password})
+
+    if (username in app.passwd and app.passwd[username] == password) or users is not None:
         session['authorized'] = True
         session['username'] = username
         return redirect(url_for('servers.index'))

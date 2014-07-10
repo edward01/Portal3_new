@@ -83,6 +83,21 @@ app.register_blueprint(server_app)
 #         return redirect(url_for('login_form'))
 
 
+@app.before_request
+def before_request():
+    print request.endpoint
+    print session
+
+    if request.endpoint != 'static':
+        if request.endpoint not in ('user.login_form', 'user.login_submit') and 'authorized' not in session:
+            return redirect(url_for('user.login_form'))
+
+    # if request.endpoint in ('user.login_form', 'user.login_submit') and 'authorized' in session:
+    #     return redirect(url_for('user.login_form'))
+
+    print('-------------------BEFORE REQUEST-------------------')
+
+
 @app.errorhandler(404)
 def not_found(error):
     return render_template('error.html'), 404

@@ -49,8 +49,11 @@ def server_add():
             'advanced_config': '',
             'timeout': 3
         }
-        app.db.servers.insert(server)
+
+        newid = app.db.servers.insert(server)
+        session['server_id'] = str(newid)
         flash('New server <strong>%s</strong> created.' % server_name, 'message')
+
     else:
         flash('server <strong>%s.%s</strong> already exists.' % (server_type, server_name), 'error')
 

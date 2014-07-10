@@ -2,20 +2,22 @@
 {% block title %} Servers {% endblock %}
 {% block body %}
 
-{% set messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-    <div class="alert alert-success alert-dismissable" id="main_alert">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {% for category, message in messages %}
-        <div>{{ message|safe }}</div>
-    {% endfor %}
-    </div>
-{% endif %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-dismissable {% if category == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <div>{{ message|safe }}</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 
 
 <div class="col-md-4 col-xs-12">
 
-    <div class="widget stacked">
+    <div class="widget stacked" id="dvServerList">
         <div class="widget-header">
               <i class="icon-pencil"></i>
               <h3>Server Types</h3>
@@ -25,14 +27,7 @@
             <div class="panel-group accordion">
 
                 {% for server_type in server_types %}
-
-                <!--<div class="panel panel-default open">-->
-                {% if active_type == server_type %}
-                <div class="panel panel-default open">
-                {% else %}
-                <div class="panel panel-default">
-                {% endif %}
-
+                <div class="panel panel-default {% if active_type == server_type %}open{% else %} {% endif %}">
                   <div class="panel-heading">
                     <h3 class="panel-title">
                       <a class="accordion-toggle" name="aServType_{{ server_type }}" data-toggle="collapse" data-parent=".accordion" href="#collapse_{{ server_type }}">
@@ -42,12 +37,7 @@
                   </div>
 
                   <!--<div id="collapse_{{ server_type }}" class="panel-collapse collapse in">-->
-                  {% if active_type == server_type %}
-                  <div id="collapse_{{ server_type }}" class="panel-collapse collapse in">
-                  {% else %}
-                  <div id="collapse_{{ server_type }}" class="panel-collapse collapse">
-                  {% endif %}
-
+                  <div id="collapse_{{ server_type }}" class="panel-collapse collapse {% if active_type == server_type %}in{% else %} {% endif %}">
                     <div class="panel-body">
                         <ul class="nav nav-pills nav-stacked" style="max-width: 300px;" class2="server_list">
                             <!--<li class="active"><a href="javascript:;">Profile</a></li>-->
@@ -269,7 +259,7 @@ $(function() {
     $("button[name^='btDel_']").click(function() {
         //alert($(this).attr('sid'));
         var server_id = $(this).attr('sid');
-        $.msgbox("This will delete " + $(this).attr('snm') + " server, Proceed?", {
+        $.msgbox("This will delete <strong>" + $(this).attr('snm') + "</strong>, proceed?", {
             type: "confirm",
             buttons : [
                 {type: "submit", value: "Yes"},
@@ -310,11 +300,10 @@ $(function() {
     });
 
 
-//    //-- 'Main Form' Cancel > click
-//    $("#btCancelMain").click(function() {
-//        $("#server-form :text").val('');
-//        $("#server-form textarea").val('');
-//    });
+
+    //-- clears alert notification on mouse clicks
+    $("#server-form").click(function() { $("#main_alert").hide(); });
+    $("#dvServerList").click(function() { $("#main_alert").hide(); });
 
 });
 
