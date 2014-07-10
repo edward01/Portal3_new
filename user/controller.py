@@ -26,9 +26,9 @@ def login_submit():
         return redirect(url_for('servers.index'))
     else:
         if username == '' or password == '':
-            flash('Username or Password is required.')
+            flash('Username or Password is required.', 'error')
         else:
-            flash('Access Denied.')
+            flash('Access Denied.', 'error')
         return render_template('user/login.html', config=app.config)
 
 

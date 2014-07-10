@@ -6,7 +6,7 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
-            <div class="alert alert-dismissable {% if category == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+            <div class="alert alert-dismissable {% if category == 'error' %}alert-danger{% else %}alert-success{% endif %}" id="main_alert">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <div>{{ message|safe }}</div>
             </div>
@@ -50,11 +50,7 @@
                             </li>
 
                             {% for server in grouped_server[server_type] %}
-                            {% if active_name == server.server_name %}
-                            <li class="active">
-                            {% else %}
-                            <li>
-                            {% endif %}
+                            <li {% if active_name == server.server_name %}class="active" {% else %} {% endif %}>
                                 <a href="javascript:;" class="aServList" sid="{{ server._id }}" snm="{{ server.server_name }}">
                                 {{ server.server_name }}
                                 <span class="pull-right">
