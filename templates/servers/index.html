@@ -106,74 +106,76 @@
               <input type="hidden" id="hf_selType" name="hf_selType" value="{{ active_type }}" />
               <input type="hidden" id="hf_selName" name="hf_selName" value="{{ active_name }}" />
               <input type="hidden" id="hf_selID" name="hf_selID" value="{{ server_dtls._id }}" />
+              <input type="hidden" id="hf_advConf" name="hf_advConf" value="{{ server_dtls.advanced_config }}" />
 
 
               <ul id="myTab" class="nav nav-tabs">
-                <li class=""><a href="#home" data-toggle="tab">General</a></li>
-                <li class="active"><a href="#tbAdvConfig" data-toggle="tab">Advanced Configuration</a></li>
+                <li class="active"><a href="#home" data-toggle="tab">General</a></li>
+                <li class=""><a href="#tbAdvConfig" data-toggle="tab">Advanced Configuration</a></li>
               </ul>
               <div class="tab-content">
 
-                <div class="tab-pane fade form-horizontal" id="home">
-
-                    <div class="form-group">
+                <div id="tbServers1">
+                    <div class="form-group" style="padding-bottom: 10px;">
                         <label class="col-md-3">Server Name:</label>
                         <div class="col-md-9">
                         <input type="text" id="tServerName" name="tServerName" class="form-control" value="{{ server_dtls.server_name }}" />
                         </div>
                     </div> <!-- /.form-group -->
-                    <div class="form-group">
+                    <div class="form-group" style="padding-bottom: 10px;">
                         <label class="col-md-3">Type:</label>
                         <div class="col-md-9">
                         <input type="text" id="tServerType" name="tServerType" class="form-control" readonly value="{{ server_dtls.type }}" />
                         </div>
                     </div> <!-- /.form-group -->
-                    <div class="form-group">
+                    <div class="form-group" style="padding-bottom: 10px;">
                         <label class="col-md-3">IP Address:</label>
                         <div class="col-md-9">
                         <input type="text" id="tIPAddress" name="tIPAddress" class="form-control" value="{{ server_dtls.ip_address }}"  />
                         </div>
                     </div> <!-- /.form-group -->
-                    <div class="form-group" id="dvSharedSecret">
+                    <div class="form-group" id="dvSharedSecret" style="padding-bottom: 10px;">
                         <label class="col-md-3">Shared Secret:</label>
                         <div class="col-md-9">
                         <input type="text" id="tSharedSecret" name="tSharedSecret" class="form-control" value="{{ server_dtls.shared_secret }}" />
                         </div>
                     </div> <!-- /.form-group -->
-                    <div class="form-group" id="dvPort">
+                    <div class="form-group" id="dvPort" style="padding-bottom: 10px;">
                         <label class="col-md-3">Port:</label>
                         <div class="col-md-9">
                         <input type="text" id="tPort" name="tPort" class="form-control" value="{{ server_dtls.port }}" />
                         </div>
                     </div> <!-- /.form-group -->
-                    <div class="form-group" id="dvPrincipal">
+                    <div class="form-group" id="dvPrincipal" style="padding-bottom: 10px;">
                         <label class="col-md-3">Principal:</label>
                         <div class="col-md-9">
                         <input type="text" id="tPrincipal" name="tPrincipal" class="form-control" value="{{ server_dtls.principal }}" />
                         </div>
                     </div> <!-- /.form-group -->
-                    <div class="form-group" id="dvCredentials">
+                    <div class="form-group" id="dvCredentials" style="padding-bottom: 10px;">
                         <label class="col-md-3">Credentials:</label>
                         <div class="col-md-9">
                         <input type="text" id="tCredentials" name="tCredentials" class="form-control" value="{{ server_dtls.credentials }}" />
                         </div>
                     </div> <!-- /.form-group -->
-                    <div class="form-group">
+                    <div class="form-group" style="padding-bottom: 10px;">
                         <label class="col-md-3">Timeout (in seconds):</label>
                         <div class="col-md-9">
                         <input type="text" id="tTimeout" name="tTimeout" class="form-control" value="{{ server_dtls.timeout }}" />
                         </div>
                     </div> <!-- /.form-group -->
-
                 </div>
 
-                <div class="tab-pane fade active in form-horizontal" id="tbAdvConfig">
-                    <div class="form-group" style="">
-                        <div class="col-md-12">
-                            <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="20">{{ server_dtls.advanced_config }}</textarea>
-                        </div>
-                    </div> <!-- /.form-group -->
+                <div id="tbServers2" style="padding-bottom: 10px;">
+                    <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="20">{{ server_dtls.advanced_config }}</textarea>
                 </div>
+
+
+                <!--<div class="tab-pane fade active in form-horizontal" id="home">-->
+                <!--</div>-->
+
+                <!--<div class="tab-pane fade form-horizontal" id="tbAdvConfig">-->
+                <!--</div>-->
 
                 <div class="form-group">
                     <div class="col-md-12" style="text-align: right;">
@@ -225,12 +227,40 @@
 
 <script>
 $(function() {
+    var editor;
+    var sAdvConfigVal = $("#hf_advConf").val();
+
     $("#new_server_alert").hide();
 
 
     if ($("#hf_selName").val() != 'None') {
         toggle_fields($("#tServerType").val());
     }
+
+
+    //-- tab functionality
+    //------------------------------------------------------------------------------------
+    $("#tbServers2").hide();
+    $('a[href="#home"]').click(function() {
+        $("#tbServers1").show();
+        $("#tbServers2").hide();
+    });
+    $('a[href="#tbAdvConfig"]').click(function() {
+        $("#tbServers1").hide();
+        $("#tbServers2").show();
+
+        //-- textarea codemirror
+        if (!editor) {
+             editor = CodeMirror.fromTextArea(document.getElementById("tAdvConfig"), {
+                mode: "application/xml",
+                styleActiveLine: true,
+                lineNumbers: true,
+                lineWrapping: true
+            });
+        }
+        editor.setValue(sAdvConfigVal);
+    });
+    //------------------------------------------------------------------------------------
 
 
     //-- Server Type > click
@@ -293,6 +323,8 @@ $(function() {
         var server_id = $(this).attr('sid');
         $("#hf_selID").val(server_id);
 
+//        $("#tbServers2").show();
+
         $.get('/servers/load/'+server_id, function(data) {
             var srvr = jQuery.parseJSON(data);
             $("#tServerName").val(srvr.server_name);
@@ -304,10 +336,16 @@ $(function() {
             $("#tCredentials").val(srvr.credentials);
             $("#tTimeout").val(srvr.timeout);
             $("#tAdvConfig").val(srvr.advanced_config);
-            editor.setValue(srvr.advanced_config);
+            sAdvConfigVal = srvr.advanced_config;
+
+            if (editor) {
+                editor.setValue(sAdvConfigVal);
+            }
 
             toggle_fields(srvr.type);
         });
+
+//        $("#tbServers2").hide();
     });
 
 
@@ -318,8 +356,16 @@ $(function() {
 
 
 
+
+
+
     //-- sets 'HOME' as default active tab
-    $("a[href='#home']").trigger('click');
+//    $("a[href='#home']").trigger('click');
+
+
+//    $("a[href='#tbAdvConfig']").click(function() {
+//        $(".aServList").trigger('click');
+//    });
 
 });
 
@@ -355,16 +401,6 @@ function toggle_fields(srvr_type) {
         $("#dvCredentials").show();
     }
 }
-
-
-//-- textarea codemirror
-var editor = CodeMirror.fromTextArea(document.getElementById("tAdvConfig"), {
-    mode: "application/xml",
-    styleActiveLine: true,
-    lineNumbers: true,
-    lineWrapping: true,
-    setValue: ''
-});
 
 </script>
 
