@@ -1,38 +1,6 @@
 {% extends "base.html" %}
-{% block title %} Servers {% endblock %}
+{% block title %} {{ viewbag.module_name|capitalize }} {% endblock %}
 {% block body %}
-
-
-<link href="{{ url_for('static', filename='css/codemirror.css') }}" rel="stylesheet">
-<script src="{{ url_for('static', filename='js/libs/codemirror.js') }}"></script>
-<script src="{{ url_for('static', filename='js/mode/xml.js') }}"></script>
-
-<style type="text/css">
-    .CodeMirror {
-    	border: 1px solid #CCCCCC;
-		border-radius: 4px 4px 4px 4px;
-		height: 320px;
-		width: 100%;
-	}
-	.CodeMirror-scroll {
-		overflow-y: hidden;
-		overflow-x: auto;
-	}
-</style>
-
-
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-dismissable {% if category == 'error' %}alert-danger{% else %}alert-success{% endif %}" id="main_alert">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <div>{{ message|safe }}</div>
-            </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-
 
 
 <div class="col-md-4 col-xs-12">
@@ -46,7 +14,7 @@
         <div class="widget-content">
             <div class="panel-group accordion">
 
-                {% for server_type in server_types %}
+                {% for server_type in server_types|sort %}
                 <div class="panel panel-default {% if active_type == server_type %}open{% else %} {% endif %}">
                   <div class="panel-heading">
                     <h3 class="panel-title">
@@ -69,7 +37,7 @@
                                 <input type="hidden" name="hf_{{ server_type }}" value="{{ server_type }}" />
                             </li>
 
-                            {% for server in grouped_server[server_type] %}
+                            {% for server in grouped_server[server_type]|sort(true) %}
                             <li {% if active_name == server.server_name %}class="active" {% else %} {% endif %}>
                                 <a href="javascript:;" class="aServList" sid="{{ server._id }}" snm="{{ server.server_name }}">
                                 {{ server.server_name }}

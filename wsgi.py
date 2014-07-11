@@ -8,7 +8,8 @@ import pymongo_safe
 import httplib2
 
 from user.controller import user_app
-from servers.controller import server_app
+from servers.controller import bp_app as servers_app
+from gateways.controller import bp_app as gateways_app
 
 # user: admin
 # password: iop-098
@@ -66,7 +67,8 @@ app.passwd = {
 # Blueprints...
 # -------------------------------------------------------------------------------------------------------------------
 app.register_blueprint(user_app)
-app.register_blueprint(server_app)
+app.register_blueprint(servers_app)
+app.register_blueprint(gateways_app)
 
 
 # @app.before_request

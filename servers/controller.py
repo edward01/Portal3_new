@@ -4,17 +4,20 @@ from bson.objectid import ObjectId
 from bson.json_util import dumps
 from pprint import pprint
 
-server_app = Blueprint('servers', __name__, url_prefix='/servers')
+viewbag = dict()
+viewbag['module_name'] = 'servers'
+
+bp_app = Blueprint(viewbag['module_name'], __name__, url_prefix='/%s' % viewbag['module_name'])
 
 
-@server_app.before_request
+@bp_app.before_request
 def before_request():
-    request.mod = 'servers'
+    request.mod = viewbag['module_name']
 
 
-@server_app.route('/', methods=['GET'])
-@server_app.route('/<active_type>', methods=['GET'])
-@server_app.route('/<active_type>/<active_name>', methods=['GET'])
+@bp_app.route('/', methods=['GET'])
+@bp_app.route('/<active_type>', methods=['GET'])
+@bp_app.route('/<active_type>/<active_name>', methods=['GET'])
 def index(active_type=None, active_name=None):
     # load server types
     grouped_server = {}
@@ -31,11 +34,11 @@ def index(active_type=None, active_name=None):
 
     return render_template('servers/index.html', config=app.config, grouped_server=grouped_server,
                            server_types=server_types, active_type=active_type, active_name=active_name,
-                           server_dtls=server_dtls)
+                           server_dtls=server_dtls, viewbag=viewbag)
 
 
-@server_app.route('/add', methods=['POST'])
-def server_add():
+@bp_app.route('/add', methods=['POST'])
+def add():
     server_name = request.form['txtNewServer']
     server_type = request.form['hfNewServerType']
 
@@ -60,8 +63,8 @@ def server_add():
     return redirect(url_for('.index', active_type=server_type, active_name=server_name))
 
 
-@server_app.route('/delete/<server_id>', methods=['POST'])
-def server_delete(server_id):
+@bp_app.route('/delete/<server_id>', methods=['POST'])
+def delete(server_id):
     server_type = request.form['hf_selType']
     server = app.db.servers.find_one({'_id': ObjectId(server_id)})
 
@@ -83,14 +86,14 @@ def server_delete(server_id):
     return redirect(url_for('.index', active_type=server_type))
 
 
-@server_app.route('/load/<server_id>', methods=['GET'])
-def server_load(server_id):
+@bp_app.route('/load/<server_id>', methods=['GET'])
+def load(server_id):
     server = app.db.servers.find_one({'_id': ObjectId(server_id)})
     return dumps(server)
 
 
-@server_app.route('/save', methods=['POST'])
-def server_save():
+@bp_app.route('/save', methods=['POST'])
+def save():
     server_type = request.form['hf_selType']
     server_id = request.form['hf_selID']
     if server_id is None or server_id == '':

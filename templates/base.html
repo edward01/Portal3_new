@@ -32,6 +32,23 @@
     <script src="{{ url_for('static', filename='js/libs/jquery-1.9.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/libs/jquery-ui-1.10.0.custom.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/libs/bootstrap.min.js') }}"></script>
+
+
+    <link href="{{ url_for('static', filename='css/codemirror.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/libs/codemirror.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/mode/xml.js') }}"></script>
+    <style type="text/css">
+        .CodeMirror {
+            border: 1px solid #CCCCCC;
+            border-radius: 4px 4px 4px 4px;
+            height: 320px;
+            width: 100%;
+        }
+        .CodeMirror-scroll {
+            overflow-y: hidden;
+            overflow-x: auto;
+        }
+    </style>
   </head>
 
 <body>
@@ -118,7 +135,7 @@
 			<div class="collapse subnav-collapse">
 				<ul class="mainnav">
 				
-					<li class="dropdown">
+					<li class="">
 						<a href="#">
 							<i class="icon-th"></i>
 							<span>Status</span>
@@ -130,14 +147,15 @@
 							<span>Restart</span>
 						</a>
 					</li>
-                    <li class="active">
+                    <li class="{% if viewbag.module_name == 'servers' %} active {% endif %}">
 						<a href="{{ url_for('servers.index') }}">
 							<i class="icon-bookmark"></i>
 							<span>Servers</span>
 						</a>
 					</li>
-                    <li class="dropdown">
-						<a href="#">
+                    <li class="{% if viewbag.module_name == 'gateways' %} active {% endif %}">
+						<a href="{{ url_for('gateways.index') }}">
+                        <!--<a href="#">-->
 							<i class="icon-pencil"></i>
 							<span>Getways</span>
 						</a>
@@ -183,6 +201,18 @@
     <div class="container">
 
       <div class="row">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-dismissable {% if category == 'error' %}alert-danger{% else %}alert-success{% endif %}" id="main_alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <div>{{ message|safe }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
 
         {% block body %}{% endblock %}
 
