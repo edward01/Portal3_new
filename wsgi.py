@@ -15,10 +15,9 @@ from gateways.controller import bp_app as gateways_app
 # password: iop-098
 
 
-portal_installation_path = '%s/portal3_new/portal' % os.getcwd()
-
 app = Flask('Portal3')
 app.config.from_object('config')
+app.portal_installation_path = '%s/portal3_new/portal' % os.getcwd()
 
 
 # database

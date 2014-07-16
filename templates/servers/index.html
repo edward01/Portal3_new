@@ -7,15 +7,15 @@
 
     <div class="widget stacked" id="dvServerList">
         <div class="widget-header">
-              <i class="icon-pencil"></i>
-              <h3>Server Types</h3>
-            </div> <!-- /.widget-header -->
+          <i class="icon-pencil"></i>
+          <h3>Server Types</h3>
+        </div> <!-- /.widget-header -->
 
         <div class="widget-content">
-            <div class="panel-group accordion">
+            <div class="panel-group accordion" style="margin-top: -10px;">
 
                 {% for server_type in server_types|sort %}
-                <div class="panel panel-default {% if active_type == server_type %}open{% else %} {% endif %}">
+                <div class="panel panel-default {% if active_type == server_type %}open{% endif %}">
                   <div class="panel-heading">
                     <h3 class="panel-title">
                       <a class="accordion-toggle" name="aServType_{{ server_type }}" data-toggle="collapse" data-parent=".accordion" href="#collapse_{{ server_type }}">
@@ -24,8 +24,7 @@
                     </h3>
                   </div>
 
-                  <!--<div id="collapse_{{ server_type }}" class="panel-collapse collapse in">-->
-                  <div id="collapse_{{ server_type }}" class="panel-collapse collapse {% if active_type == server_type %}in{% else %} {% endif %}">
+                  <div id="collapse_{{ server_type }}" class="panel-collapse collapse {% if active_type == server_type %}in{% endif %}">
                     <div class="panel-body">
                         <ul class="nav nav-pills nav-stacked" style="max-width: 300px;" class2="server_list">
                             <!--<li class="active"><a href="javascript:;">Profile</a></li>-->
@@ -38,7 +37,7 @@
                             </li>
 
                             {% for server in grouped_server[server_type]|sort(true) %}
-                            <li {% if active_name == server.server_name %}class="active" {% else %} {% endif %}>
+                            <li {% if active_name == server.server_name %}class="active"{% endif %}>
                                 <a href="javascript:;" class="aServList" sid="{{ server._id }}" snm="{{ server.server_name }}">
                                 {{ server.server_name }}
                                 <span class="pull-right">
@@ -138,13 +137,6 @@
                     <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="20">{{ server_dtls.advanced_config }}</textarea>
                 </div>
 
-
-                <!--<div class="tab-pane fade active in form-horizontal" id="home">-->
-                <!--</div>-->
-
-                <!--<div class="tab-pane fade form-horizontal" id="tbAdvConfig">-->
-                <!--</div>-->
-
                 <div class="form-group">
                     <div class="col-md-12" style="text-align: right;">
                     <button type="submit" class="btn btn-primary" id="btEdit" name="btEdit" style="width: 80px;">Save</button>
@@ -183,8 +175,8 @@
               <input type="hidden" id="hfNewServerType" name="hfNewServerType" />
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" id="btCancel" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary" id="btCreateNew">Create Server</button>
+            <button type="button" class="btn btn-default" id="btCancel" data-dismiss="modal">Close</button>
           </div>
           </form>
         </div><!-- /.modal-content -->
@@ -342,7 +334,7 @@ function submit_form() {
     if($("#txtNewServer").val().trim() == '') {
         $("#msg").text('Server Name is required.');
         $("#new_server_alert").show();
-        $("#txtNewServer").focus();
+        $(this).focus();
         return false;
     }
     else {

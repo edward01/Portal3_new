@@ -19,8 +19,9 @@ def login_submit():
     password = request.form['password']
 
     users = app.db.users.find_one({'name': username, 'password': password})
+    pprint(users)
 
-    if (username in app.passwd and app.passwd[username] == password) or users is not None:
+    if users or (username in app.passwd and app.passwd[username] == password):
         session['authorized'] = True
         session['username'] = username
         return redirect(url_for('servers.index'))
@@ -34,5 +35,7 @@ def login_submit():
 
 @user_app.route('/logout', methods=['GET'])
 def logout():
+    session['gateway_id'] = ''
+    session['sel_server_type'] = ''
     session.clear()
     return redirect(url_for('.login_form'))

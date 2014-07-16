@@ -1,24 +1,351 @@
 {% extends "base.html" %}
-{% block title %} {{ viewbag.module_name|capitalize }} {% endblock %}
+{% block title %} {{ viewbag['module_name']|capitalize }} {% endblock %}
 {% block body %}
 
 
 <div class="col-md-4 col-xs-12">
 
+    <div class="widget stacked" id="dv_left_menu">
+        <div class="widget-header">
+              <i class="icon-pencil"></i>
+              <h3>Gateways</h3>
+        </div> <!-- /.widget-header -->
 
+        <div class="widget-content">
+            <div class="panel-group accordion" style="margin-top: -10px;">
+
+
+                <button type="button" id="btAdd_{{ server_type }}" name="btAdd_{{ server_type }}" class="btn btn-primary btn-sm" style="width:100%;" data-toggle="modal" href="#bigModal">
+                <span class="icon-plus"></span> Add New Gateway
+                </button>
+                <div style="height: 5px;"></div>
+
+
+                {% set gateway_ctr = 1 %}
+                {% for gateway in gateways|sort(attribute='gateway_name') %}
+                <!--<div class="panel panel-default open">-->
+                <!--<div class="panel panel-default">-->
+                <div class="panel panel-default {% if viewbag['selected_gateway']|string() == gateway['_id']|string() %} open {% endif %}">
+
+                    <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent=".accordion" href="#collapse_{{ gateway_ctr }}" attrkey="list_gateway" attrval="{{ gateway['_id'] }}">
+                        {{ gateway['gateway_name'] }}
+
+                        <span class="pull-right">
+                            <button type="button" class="btn btn-danger btn-xs msgbox-confirm" attrkey="bt_del_gateway" attrval="{{ gateway['_id'] }}" attrname="{{ gateway['gateway_name'] }}">
+                            <span class="icon-remove"></span>
+                            </button>
+                        </span>
+                      </a>
+                    </h4>
+                    </div>
+
+                    <!--<div id="collapseOne" class="panel-collapse collapse in">-->
+                    <!--<div id="collapseOne" class="panel-collapse collapse">-->
+                    <div id="collapse_{{ gateway_ctr }}" class="panel-collapse collapse {% if viewbag['selected_gateway']|string() == gateway['_id']|string() %} in {% endif %}">
+                        <div class="panel-body">
+                            <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">
+
+                                <!--<li class="active"><a href="javascript:;">Profile</a></li>-->
+                                <!--<li class=""><a href="javascript:;">Profile</a></li>-->
+                                {% for server_type in server_types|sort %}
+                                <li {% if viewbag['selected_server_type']|string() == server_type %} class="active" {% endif %}>
+                                    <a href="javascript:;" attrkey="list_serv_type" attrval="{{ server_type }}">{{ server_type }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                    {% set gateway_ctr = gateway_ctr + 1 %}
+                {% endfor %}
+
+
+            </div>
+        </div>
+    </div>
 
 </div> <!-- /span6 -->
 
 
 <div class="col-md-8">
 
+    <div class="widget stacked">
+        <div class="widget-content">
 
+          <form id="server-form" action="/gateways/save" method="post" role="form" class="">
+
+              <input type="hidden" id="hf_sel_gateway" name="hf_sel_gateway" value="{{ viewbag['selected_gateway'] }}" />
+              <input type="hidden" id="hf_sel_servtype" name="hf_sel_servtype" value="{{ viewbag['selected_server_type'] }}" />
+              <input type="hidden" id="hf_adv_config" name="hf_adv_config" value="{{ sel_gateway_info['advanced_config'] }}" />
+              <input type="hidden" id="hf_sel_tab" name="hf_sel_tab" />
+
+
+              <ul id="myTab" class="nav nav-tabs">
+                <!--<li class="active"><a href="#home" data-toggle="tab">General</a></li>-->
+                <!--<li class=""><a href="#home" data-toggle="tab">General</a></li>-->
+                <li class="active"><a href="#home" data-toggle="tab">Servers</a></li>
+                <li class=""><a href="#general" data-toggle="tab">General</a></li>
+                <li class=""><a href="#advconf" data-toggle="tab">Advanced Configuration</a></li>
+              </ul>
+              <div class="tab-content">
+
+                <div id="tbServers1">
+                    <label style="padding-right: 10px;">Selected Servers:</label>
+                    <span id="form1_html"></span>
+                </div>
+
+                <div id="tbServers2">
+                    <div class="form-group" style="padding-bottom: 10px;">
+                        <label class="col-md-3">Name:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="t_gateway_name" name="t_gateway_name" class="form-control" value="{{ sel_gateway_info['gateway_name']|default('', true) }}" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group" style="padding-bottom: 10px;">
+                        <label class="col-md-3">IP Address:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="t_ip_address" name="t_ip_address" class="form-control" value="{{ sel_gateway_info['ip_address']|default('', true) }}" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                    <div class="form-group" style="padding-bottom: 10px;">
+                        <label class="col-md-3">Module:</label>
+                        <div class="col-md-9">
+                        <input type="text" id="t_module" name="t" class="form-control" />
+                        </div>
+                    </div> <!-- /.form-group -->
+                </div>
+
+                <div id="tbServers3" style="padding-bottom: 10px;">
+                    <textarea id="tAdvConfig" name="tAdvConfig" class="form-control" rows="20"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12" style="text-align: right;">
+                    <button type="submit" class="btn btn-primary" id="btEdit" name="btEdit" style="width: 80px;">Save</button>
+                    <!--<button type="button" class="btn btn-default" id="btCancelMain" name="btCancelMain" style="width: 80px;">Reset</button>-->
+                    </div>
+                </div> <!-- /.form-group -->
+
+              </div>
+
+          </form>
+
+        </div> <!-- /widget-content -->
+    </div> <!-- /widget -->
 
 </div> <!-- /span6 -->
 
 
 
+<!--Add new gateway modal-->
+<div id="bigModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form id="add-form" action="/gateways/add" method="post">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" >New Gateway</h4>
+      </div>
+      <div class="modal-body">
+          <div class="alert alert-danger alert-dismissable" id="new_alert">
+            <div id="msg"></div>
+            </div>
+          <input type="text" id="txt_new_gateway" name="txt_new_gateway" class="form-control input-md" />
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" id="btCreateNew">Create Gateway</button>
+        <button type="button" class="btn btn-default" id="btCancel" data-dismiss="modal">Close</button>
+      </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div> <!-- /.modal -->
 
 
+
+<script>
+$(function() {
+    var editor;
+    var sAdvConfigVal = $("#hf_adv_config").val();
+
+
+    //-- Hides new_entry alert
+    $("#new_alert").hide();
+
+    //-- clears alert notification on mouse click
+    $(".tab-content").click(function() { $("#main_alert").hide(); });
+    $("#dv_left_menu").click(function() { $("#main_alert").hide(); });
+
+
+    //-- Gateway Click
+    $("a[attrkey='list_gateway']").click(function() {
+        //alert($(this).attr('attrval'));
+        $("ul.nav-pills > li").removeClass("active");
+        show_gateway_tabs(true);
+
+        var gateway_id = $(this).attr('attrval');
+        $("#hf_sel_gateway").val(gateway_id);
+        $('#server-form').attr('action', '/gateways/save');
+
+        $.get('/gateways/property/'+gateway_id, function(data) {
+            var item = jQuery.parseJSON(data);
+            $("#t_gateway_name").val(item.gateway_name);
+            $("#t_ip_address").val(item.ip_address);
+            sAdvConfigVal = item.advanced_config;
+            $("#tAdvConfig").val(sAdvConfigVal);
+            if (editor) {
+                editor.setValue(sAdvConfigVal);
+            }
+        });
+    });
+
+    //-- Server Type Click
+    $("a[attrkey='list_serv_type']").click(function() {
+        //alert($(this).attr('attrval'));
+        var gateway_id = $("#hf_sel_gateway").val();
+        var sel_server_type = $(this).attr('attrval');
+        $('#server-form').attr('action', '/gateways/save/servers');
+
+        $("#hf_sel_servtype").val(sel_server_type);
+        $("ul.nav-pills > li").removeClass("active");
+        $(this).parent().addClass("active");
+        show_gateway_tabs(false);
+        load_servers_multiselect(gateway_id, sel_server_type)
+    });
+
+
+
+    //-- tab functionality
+    //------------------------------------------------------------------------------------
+    $("#tbServers2").hide();
+    $("#tbServers3").hide();
+    $('a[href="#home"]').click(function() {
+        $("#tbServers1").show();
+        $("#tbServers2").hide();
+        $("#tbServers3").hide();
+    });
+    $('a[href="#general"]').click(function() {
+        $("#tbServers1").hide();
+        $("#tbServers2").show();
+        $("#tbServers3").hide();
+        $("#hf_sel_tab").val($(this).attr('href'));
+    });
+    $('a[href="#advconf"]').click(function() {
+        $("#tbServers1").hide();
+        $("#tbServers2").hide();
+        $("#tbServers3").show();
+        $("#hf_sel_tab").val($(this).attr('href'));
+
+        //-- textarea codemirror
+        if (!editor) {
+             editor = CodeMirror.fromTextArea(document.getElementById("tAdvConfig"), {
+                mode: "application/xml",
+                styleActiveLine: true,
+                lineNumbers: true,
+                lineWrapping: true
+            });
+        }
+        editor.setValue(sAdvConfigVal);
+    });
+
+
+    //-- Show gateway or server type tab
+    if ($("#hf_sel_servtype").val() == '')  //show gateway tab
+        show_gateway_tabs(true);
+    else {
+        show_gateway_tabs(false);           //show server type tab
+        load_servers_multiselect($("#hf_sel_gateway").val(), $("#hf_sel_servtype").val())
+        $('#server-form').attr('action', '/gateways/save/servers');
+    }
+    //------------------------------------------------------------------------------------
+
+
+    //-- Cancel new server button > click
+    $("#btCancel").click(function() {
+        $("#new_alert").hide();
+    });
+    $("#txt_new_gateway").keypress(function(e) {
+        if(e.which == 13)
+            return submit_form();
+    });
+    $("#add-form").submit(function(event) {
+        //event.preventDefault();
+        return submit_form();
+    });
+
+
+    //-- Delete Gateway > click
+    $("button[attrkey='bt_del_gateway']").click(function(event) {
+        //alert($(this).attr('attrval'));
+        event.stopPropagation();
+        var gateway_id = $(this).attr('attrval');
+        $.msgbox("This will delete <strong>" + $(this).attr('attrname') + "</strong>, proceed?", {
+            type: "confirm",
+            buttons : [
+                {type: "submit", value: "Yes"},
+                {type: "submit", value: "No"},
+            ]
+        }, function(result) {
+            if (result == 'Yes') {
+                $('#server-form').attr('action', '/gateways/delete/'+gateway_id);
+                $('#server-form').submit();
+            }
+        });
+    });
+
+});
+
+
+//-- Create new server > submit
+function submit_form() {
+    if($("#txt_new_gateway").val().trim() == '') {
+        $("#msg").text('Gateway is required.');
+        $("#new_alert").show();
+        $(this).focus();
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+
+//-- Sets default active tab
+function show_gateway_tabs(ab_show_gateway) {
+    if (ab_show_gateway) {
+        var sel_tab = $("#hf_sel_tab").val();
+        $('a[href="#home"]').hide();
+        $('a[href="#general"]').show();
+        $('a[href="#advconf"]').show();
+        if (sel_tab == '#advconf') {
+            $('a[href="#advconf"]').trigger('click');
+        }
+        else {
+            $('a[href="#general"]').trigger('click');
+        }
+    }
+    else {
+        $('a[href="#home"]').show();
+        $('a[href="#general"]').hide();
+        $('a[href="#advconf"]').hide();
+        $('a[href="#home"]').trigger('click');
+    }
+}
+
+function load_servers_multiselect(gateway_id, sel_server_type) {
+    $.get('/gateways/load/servers/'+gateway_id+'/'+sel_server_type, function(data) {
+        $("#form1_html").html(data);
+
+        //-- Multiselect dropdownlist
+        $("#ml_servers").multiselect({
+            includeSelectAllOption: true,
+            numberDisplayed: 1
+        });
+    });
+}
+</script>
 
 {% endblock %}

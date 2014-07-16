@@ -32,9 +32,8 @@ def index(active_type=None, active_name=None):
     if active_name is not None:
         server_dtls = app.db.servers.find_one({'_id': ObjectId(session['server_id'])})
 
-    return render_template('servers/index.html', config=app.config, grouped_server=grouped_server,
-                           server_types=server_types, active_type=active_type, active_name=active_name,
-                           server_dtls=server_dtls, viewbag=viewbag)
+    return render_template('servers/index.html', grouped_server=grouped_server, server_types=server_types,
+                           active_type=active_type, active_name=active_name, server_dtls=server_dtls, viewbag=viewbag)
 
 
 @bp_app.route('/add', methods=['POST'])
@@ -58,7 +57,7 @@ def add():
         flash('New server <strong>%s</strong> created.' % server_name, 'message')
 
     else:
-        flash('server <strong>%s.%s</strong> already exists.' % (server_type, server_name), 'error')
+        flash('Server <strong>%s.%s</strong> already exists.' % (server_type, server_name), 'error')
 
     return redirect(url_for('.index', active_type=server_type, active_name=server_name))
 
