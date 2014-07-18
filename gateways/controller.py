@@ -35,8 +35,16 @@ def index():
     if 'sel_server_type' in session:
         viewbag['selected_server_type'] = session['sel_server_type']
 
+    lookups = {}
+    modules = {'gateway': []}
+    for _module in os.listdir('%s/modules' % app.portal_installation_path):
+        _module_split = _module.split('_')
+        if _module_split[0] in 'gateway':
+            modules[_module_split[0]].append(_module)
+    lookups['modules'] = modules
+
     return render_template('gateways/index.html', viewbag=viewbag, gateways=gateways, server_types=server_types,
-                           sel_gateway_info=sel_gateway_info)
+                           sel_gateway_info=sel_gateway_info, modules=lookups['modules']['gateway'])
 
 
 @bp_app.route('/add', methods=['POST'])
@@ -48,7 +56,7 @@ def gateways_add():
             'gateway_name': gateway_name,
             'description': '',
             'advanced_config': '',
-            'module': None,
+            'module': '',
             'ip_address': '',
             'servers': {}
         }
@@ -80,13 +88,14 @@ def gateways_delete(gateway_id):
 @bp_app.route('/property/<gateway_id>', methods=['GET'])
 def gateways_load(gateway_id):
     gateway = app.db.gateways.find_one({'_id': ObjectId(gateway_id)})
-    lookups = {}
-    modules = {'gateway': []}
-    for _module in os.listdir('%s/modules' % app.portal_installation_path):
-        _module_split = _module.split('_')
-        if _module_split[0] in 'gateway':
-            modules[_module_split[0]].append(_module)
-    lookups['modules'] = modules
+    # lookups = {}
+    # modules = {'gateway': []}
+    # for _module in os.listdir('%s/modules' % app.portal_installation_path):
+    #     _module_split = _module.split('_')
+    #     if _module_split[0] in 'gateway':
+    #         modules[_module_split[0]].append(_module)
+    # lookups['modules'] = modules
+    # gateway['modules'] = lookups['modules']['gateway']
     return dumps(gateway)
 
 
@@ -106,7 +115,7 @@ def gateways_save():
     new_gateway = {
         'gateway_name': request.form.get('t_gateway_name'),
         'ip_address': request.form.get('t_ip_address'),
-        'module': '',
+        'module': request.form.get('ddl_module'),
         'advanced_config': request.form.get('tAdvConfig')
     }
 

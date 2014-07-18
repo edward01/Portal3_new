@@ -17,7 +17,7 @@ from gateways.controller import bp_app as gateways_app
 
 app = Flask('Portal3')
 app.config.from_object('config')
-app.portal_installation_path = '%s/portal3_new/portal' % os.getcwd()
+app.portal_installation_path = '%s/portal' % os.getcwd()
 
 
 # database

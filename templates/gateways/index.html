@@ -98,21 +98,26 @@
 
                 <div id="tbServers2">
                     <div class="form-group" style="padding-bottom: 10px;">
-                        <label class="col-md-3">Name:</label>
-                        <div class="col-md-9">
+                        <label class="col-md-2">Name:</label>
+                        <div class="col-md-10">
                         <input type="text" id="t_gateway_name" name="t_gateway_name" class="form-control" value="{{ sel_gateway_info['gateway_name']|default('', true) }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group" style="padding-bottom: 10px;">
-                        <label class="col-md-3">IP Address:</label>
-                        <div class="col-md-9">
+                        <label class="col-md-2">IP Address:</label>
+                        <div class="col-md-10">
                         <input type="text" id="t_ip_address" name="t_ip_address" class="form-control" value="{{ sel_gateway_info['ip_address']|default('', true) }}" />
                         </div>
                     </div> <!-- /.form-group -->
                     <div class="form-group" style="padding-bottom: 10px;">
-                        <label class="col-md-3">Module:</label>
-                        <div class="col-md-9">
-                        <input type="text" id="t_module" name="t" class="form-control" />
+                        <label class="col-md-2">Module:</label>
+                        <div class="col-md-10">
+                        <select id="ddl_module" name="ddl_module" class="form-control">
+                            <option value="">- Please Select -</option>
+                            {% for module in modules %}
+                            <option value="{{ module }}" {% if sel_gateway_info['module'] == module %} selected {% endif %}>{{ module }}</option>
+                            {% endfor %}
+                        </select>
                         </div>
                     </div> <!-- /.form-group -->
                 </div>
@@ -194,11 +199,13 @@ $(function() {
             var item = jQuery.parseJSON(data);
             $("#t_gateway_name").val(item.gateway_name);
             $("#t_ip_address").val(item.ip_address);
+            $("#ddl_module").val(item.module);
             sAdvConfigVal = item.advanced_config;
             $("#tAdvConfig").val(sAdvConfigVal);
             if (editor) {
                 editor.setValue(sAdvConfigVal);
             }
+            console.log(item);
         });
     });
 
