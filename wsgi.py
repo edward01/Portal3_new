@@ -10,6 +10,7 @@ import httplib2
 from user.controller import user_app
 from servers.controller import bp_app as servers_app
 from gateways.controller import bp_app as gateways_app
+from networks.controller import bp_app as networks_app
 
 # user: admin
 # password: iop-098
@@ -68,6 +69,7 @@ app.passwd = {
 app.register_blueprint(user_app)
 app.register_blueprint(servers_app)
 app.register_blueprint(gateways_app)
+app.register_blueprint(networks_app)
 
 
 # @app.before_request

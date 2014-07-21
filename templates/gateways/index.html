@@ -92,8 +92,8 @@
               <div class="tab-content">
 
                 <div id="tbServers1">
-                    <label style="padding-right: 10px;">Selected Servers:</label>
                     <span id="form1_html"></span>
+                    <br />
                 </div>
 
                 <div id="tbServers2">
@@ -175,7 +175,6 @@
 $(function() {
     var editor;
     var sAdvConfigVal = $("#hf_adv_config").val();
-
 
     //-- Hides new_entry alert
     $("#new_alert").hide();
@@ -345,12 +344,8 @@ function show_gateway_tabs(ab_show_gateway) {
 function load_servers_multiselect(gateway_id, sel_server_type) {
     $.get('/gateways/load/servers/'+gateway_id+'/'+sel_server_type, function(data) {
         $("#form1_html").html(data);
-
-        //-- Multiselect dropdownlist
-        $("#ml_servers").multiselect({
-            includeSelectAllOption: true,
-            numberDisplayed: 1
-        });
+        $("#ml_servers").multiselect();
+        $("#countries").multiselect();
     });
 }
 </script>

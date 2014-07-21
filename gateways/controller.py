@@ -88,14 +88,6 @@ def gateways_delete(gateway_id):
 @bp_app.route('/property/<gateway_id>', methods=['GET'])
 def gateways_load(gateway_id):
     gateway = app.db.gateways.find_one({'_id': ObjectId(gateway_id)})
-    # lookups = {}
-    # modules = {'gateway': []}
-    # for _module in os.listdir('%s/modules' % app.portal_installation_path):
-    #     _module_split = _module.split('_')
-    #     if _module_split[0] in 'gateway':
-    #         modules[_module_split[0]].append(_module)
-    # lookups['modules'] = modules
-    # gateway['modules'] = lookups['modules']['gateway']
     return dumps(gateway)
 
 
@@ -128,15 +120,18 @@ def gateways_save():
 @bp_app.route('/load/servers/<gateway_id>/<server_type>', methods=['GET'])
 def servers_load(gateway_id, server_type):
     gateway = app.db.gateways.find_one({'_id': ObjectId(gateway_id)})
+    servers = {}
+    for server in app.db.servers.find({'type': server_type}):
+        servers[str(server['_id'])] = server['server_name']
 
     multilist_html = '<select class="multiselect" multiple="multiple" id="ml_servers" name="ml_servers">'
-    for server in app.db.servers.find({'type': server_type}):
-        selected_tag = ''
-        if server_type in gateway['servers']:
-            if str(server['_id']) in gateway['servers'][server_type]:
-                selected_tag = 'selected'
+    for server_id in gateway['servers'][server_type]:
+        multilist_html += '<option value="%s" selected>%s</option>' % (server_id, servers[server_id])
+        del servers[server_id]
 
-        multilist_html += '<option value="%s" %s>%s</option>' % (server['_id'], selected_tag, server['server_name'])
+    for server_id, server_name in servers.items():
+        multilist_html += '<option value="%s">%s</option>' % (server_id, server_name)
+
     multilist_html += '</select>'
     return multilist_html
 
@@ -164,8 +159,3 @@ def servers_save():
 
     flash('Servers updated for <strong>%s</strong>.' % sel_server_type, 'message')
     return redirect(url_for('.index'))
-
-
-# ** Pending:
-# 3. modules dropdownlist populate
-# 4. modules save in gateway document
