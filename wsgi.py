@@ -111,15 +111,5 @@ def index():
     return redirect(url_for('user.login_form'))
 
 
-
-@app.route('/sample', methods=['GET'])
-def sample():
-    return render_template('test_page.html')
-
-@app.route('/sample2', methods=['GET'])
-def sample2():
-    return render_template('test_page2.html')
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=app.config['DEBUG'])

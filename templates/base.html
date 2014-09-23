@@ -111,7 +111,7 @@
 			</a>
 			
 			<ul class="dropdown-menu">
-				<!--<li><a href="javascript:;">My Profile</a></li>-->
+				<li><a href="javascript:;">My Profile</a></li>
 				<!--<li><a href="javascript:;">My Groups</a></li>-->
 				<!--<li class="divider"></li>-->
 				<li><a href="{{ url_for('user.logout') }}">Logout</a></li>
@@ -152,7 +152,7 @@
 				
 					<li class="">
 						<a href="#">
-							<i class="icon-th"></i>
+							<i class="icon-bookmark"></i>
 							<span>Status</span>
 						</a>
 					</li>
@@ -164,32 +164,31 @@
 					</li>
                     <li class="{% if viewbag.module_name == 'servers' %} active {% endif %}">
 						<a href="{{ url_for('servers.index') }}">
-							<i class="icon-bookmark"></i>
+							<i class="icon-hdd"></i>
 							<span>Servers</span>
 						</a>
 					</li>
                     <li class="{% if viewbag.module_name == 'gateways' %} active {% endif %}">
 						<a href="{{ url_for('gateways.index') }}">
-                        <!--<a href="#">-->
-							<i class="icon-pencil"></i>
-							<span>Getways</span>
+							<i class="icon-th-large"></i>
+							<span>Gateways</span>
 						</a>
 					</li>
-                    <li class="dropdown">
-						<a href="#">
-							<i class="icon-flag"></i>
+                    <li class="{% if viewbag.module_name == 'networks' %} active {% endif %}">
+						<a href="{{ url_for('networks.index') }}">
+							<i class="icon-signal"></i>
 							<span>Networks</span>
 						</a>
 					</li>
                     <li class="dropdown">
 						<a href="#">
-							<i class="icon-refresh"></i>
+							<i class=""></i>
 							<span>Templates</span>
 						</a>
 					</li>
                     <li class="dropdown">
 						<a href="#">
-							<i class="icon-signal"></i>
+							<i class=""></i>
 							<span>Zones</span>
 						</a>
 					</li>

@@ -158,7 +158,7 @@
           <div class="alert alert-danger alert-dismissable" id="new_alert">
             <div id="msg"></div>
             </div>
-          <input type="text" id="txt_new_gateway" name="txt_new_gateway" class="form-control input-md" />
+          <input type="text" id="txt_new_gateway" name="txt_new_gateway" class="form-control input-md" placeholder="Gateway Name" />
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" id="btCreateNew">Create Gateway</button>
@@ -166,8 +166,8 @@
       </div>
       </form>
     </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div> <!-- /.modal -->
+  </div> <!-- /.modal -->
+</div><!-- /.modal-dialog -->
 
 
 
@@ -269,7 +269,7 @@ $(function() {
     //------------------------------------------------------------------------------------
 
 
-    //-- Cancel new server button > click
+    //-- new entries button > click
     $("#btCancel").click(function() {
         $("#new_alert").hide();
     });
@@ -305,7 +305,7 @@ $(function() {
 });
 
 
-//-- Create new server > submit
+//-- Create new gateway > submit
 function submit_form() {
     if($("#txt_new_gateway").val().trim() == '') {
         $("#msg").text('Gateway is required.');
